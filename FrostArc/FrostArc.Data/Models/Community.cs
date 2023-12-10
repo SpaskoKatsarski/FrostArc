@@ -17,6 +17,8 @@
         [MaxLength(25)]
         public string Name { get; set; } = null!;
 
+        public string? ImageUrl { get; set; }
+
         public ICollection<Post> Posts { get; set; }
 
         //TODO: Many-to-Many with Users (Members)

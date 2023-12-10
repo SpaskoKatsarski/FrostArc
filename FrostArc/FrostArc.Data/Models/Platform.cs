@@ -16,6 +16,9 @@
         [MaxLength(50)]
         public string Name { get; set; } = null!;
 
+        [Required]
+        public string ImageUrl { get; set; }
+
         public ICollection<Game> Games { get; set; }
     }
 }

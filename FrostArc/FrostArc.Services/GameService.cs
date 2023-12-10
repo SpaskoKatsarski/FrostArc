@@ -16,11 +16,11 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<GameAllViewModel>> GetAllAsync()
+        public async Task<IEnumerable<GameListViewModel>> GetAllAsync()
         {
             return await this.dbContext.Games
                 .AsNoTracking()
-                .Select(g => new GameAllViewModel()
+                .Select(g => new GameListViewModel()
                 {
                     Id = g.Id.ToString(),
                     Title = g.Title,

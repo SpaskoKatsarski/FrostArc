@@ -22,6 +22,9 @@
         [MaxLength(500)]
         public string Description { get; set; } = null!;
 
+        [Required]
+        public string ImageUrl { get; set; } = null!;
+
         public ICollection<Game> Games { get; set; }
     }
 }

@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IDeveloperService, DeveloperService>();
 
 WebApplication app = builder.Build();
 

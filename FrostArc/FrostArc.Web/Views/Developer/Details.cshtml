@@ -1,0 +1,22 @@
+﻿@model FrostArc.Web.ViewModels.Developer.DeveloperDetailsViewModel
+
+@{
+    ViewBag.Title = "Developer Details";
+}
+
+<h2>@Model.Name</h2>
+
+<div>
+    <img src="@Model.ImageUrl" alt="Image of @Model.Name" />
+    <p>@Model.Description</p>
+    <h3>Games Developed:</h3>
+    <ul>
+        @foreach (var game in Model.Games)
+        {
+            <li>
+                <img src="@game.ImageUrl" />
+                <a asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">@game.Title</a>
+            </li>
+        }
+    </ul>
+</div>

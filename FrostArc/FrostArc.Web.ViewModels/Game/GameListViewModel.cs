@@ -1,6 +1,6 @@
 ﻿namespace FrostArc.Web.ViewModels.Game
 {
-    public class GameAllViewModel
+    public class GameListViewModel
     {
         public string Id { get; set; } = null!;
 

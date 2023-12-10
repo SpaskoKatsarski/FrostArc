@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GameListViewModel>
+﻿@model IEnumerable<DeveloperAllViewModel>
 
 @{
     ViewBag.Title = "Game Library";
@@ -10,15 +10,15 @@
     @if (Model.Count() > 0)
     {
         <div class="row">
-            @foreach (var game in Model)
+            @foreach (var developer in Model)
             {
                 <div class="col-md-4">
                     <div class="card">
-                        <img class="card-img-top" src="@game.ImageUrl" alt="Game image">
+                        <img class="card-img-top" src="@developer.ImageUrl" alt="Game image">
                         <div class="card-body">
-                            <h5 class="card-title">@game.Title</h5>
-                            <a asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">
-                                <img class="card-img-top" src="@game.ImageUrl" alt="Game image" />
+                            <h5 class="card-title">@developer.Name</h5>
+                            <a asp-controller="Developer" asp-action="Details" asp-route-id="@developer.Id">
+                                <img class="card-img-top" src="@developer.ImageUrl" alt="Dev image" />
                             </a>
                         </div>
                     </div>
