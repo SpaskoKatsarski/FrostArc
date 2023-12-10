@@ -1,0 +1,32 @@
+﻿@model IEnumerable<GameAllViewModel>
+
+@{
+    ViewBag.Title = "Game Library";
+}
+
+<h2>Game Library</h2>
+
+<div class="container">
+    @if (Model.Count() > 0)
+    {
+        <div class="row">
+            @foreach (var game in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top" src="@game.ImageUrl" alt="Game image">
+                        <div class="card-body">
+                            <h5 class="card-title">@game.Title</h5>
+                            <img class="card-img-top" src="@game.ImageUrl" alt="Game image" />
+                            <a asp-controller="Game" asp-action="Details" asp-route-id="@game.Id" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No games available in the library.</p>
+    }
+</div>

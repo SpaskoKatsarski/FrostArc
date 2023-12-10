@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostArc.Web", "FrostArc.Web\FrostArc.Web.csproj", "{3AC128A2-25EE-4A24-8B6B-FB8FFE97C258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrostArc.Web", "FrostArc.Web\FrostArc.Web.csproj", "{3AC128A2-25EE-4A24-8B6B-FB8FFE97C258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostArc.Data", "FrostArc.Data\FrostArc.Data.csproj", "{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrostArc.Data", "FrostArc.Data\FrostArc.Data.csproj", "{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{6118319B-F6EE-4244-A05F-6E6713A8816A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{139AE8D9-CD16-415C-AA26-D91AF982FF04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F47C7200-B71F-4EA7-A633-9360768E8FC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostArc.Services", "FrostArc.Services\FrostArc.Services.csproj", "{79756B0C-5A68-4293-9C84-724985C4AD6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostArc.Web.ViewModels", "FrostArc.Web.ViewModels\FrostArc.Web.ViewModels.csproj", "{A777B595-9CD1-48B1-992C-5F3390FBD2C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79756B0C-5A68-4293-9C84-724985C4AD6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79756B0C-5A68-4293-9C84-724985C4AD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79756B0C-5A68-4293-9C84-724985C4AD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79756B0C-5A68-4293-9C84-724985C4AD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A777B595-9CD1-48B1-992C-5F3390FBD2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A777B595-9CD1-48B1-992C-5F3390FBD2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A777B595-9CD1-48B1-992C-5F3390FBD2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A777B595-9CD1-48B1-992C-5F3390FBD2C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +46,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3AC128A2-25EE-4A24-8B6B-FB8FFE97C258} = {6118319B-F6EE-4244-A05F-6E6713A8816A}
 		{12F4BCF1-DA2A-4825-81BC-D51C9A6586AA} = {139AE8D9-CD16-415C-AA26-D91AF982FF04}
+		{79756B0C-5A68-4293-9C84-724985C4AD6A} = {F47C7200-B71F-4EA7-A633-9360768E8FC6}
+		{A777B595-9CD1-48B1-992C-5F3390FBD2C7} = {6118319B-F6EE-4244-A05F-6E6713A8816A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14CC198E-1AA3-45A3-99B8-2CF1D1FB174D}

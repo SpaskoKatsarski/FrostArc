@@ -1,4 +1,4 @@
-namespace FrostArc.Web.Models
+namespace FrostArc.Web.ViewModels
 {
     public class ErrorViewModel
     {

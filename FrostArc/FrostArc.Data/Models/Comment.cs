@@ -14,7 +14,7 @@
         public Guid Id { get; set; }
 
         [Required]
-        [StringLength(500, MinimumLength = 1)]
+        [MaxLength(500)]
         public string Content { get; set; } = null!;
 
         [Required]

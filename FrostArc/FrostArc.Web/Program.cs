@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using FrostArc.Data;
-using FrostArc.Web.Data;
+using FrostArc.Services.Contracts;
+using FrostArc.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<FrostArcDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IGameService, GameService>();
 
 WebApplication app = builder.Build();
 

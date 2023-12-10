@@ -1,6 +1,7 @@
 ﻿namespace FrostArc.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Post
     {
@@ -14,11 +15,11 @@
         public Guid Id { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 2)]
+        [MaxLength(100)]
         public string Title { get; set; } = null!;
 
         [Required]
-        [StringLength(1000, MinimumLength = 2)]
+        [MaxLength(1000)]
         public string Content { get; set; } = null!;
 
         //TODO Add Foreign key to User
@@ -32,6 +33,13 @@
         [Required]
         [Range(0, double.MaxValue)]
         public int Dislikes { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Community))]
+        public Guid CommunityId { get; set; }
+
+        [Required]
+        public Community Community { get; set; } = null!;
 
         public ICollection<Comment> Comments { get; set; }
     }

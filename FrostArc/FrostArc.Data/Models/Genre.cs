@@ -13,11 +13,11 @@
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 1)]
+        [MaxLength(100)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [StringLength(500, MinimumLength = 10)]
+        [MaxLength(500)]
         public string Description { get; set; } = null!;
 
         public ICollection<Game> Games { get; set; }

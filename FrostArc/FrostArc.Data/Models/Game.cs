@@ -15,7 +15,7 @@
         public Guid Id { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 2)]
+        [MaxLength(100)]
         public string Title { get; set; } = null!;
 
         [Required]
@@ -37,11 +37,11 @@
         public ICollection<Platform> Platforms { get; set; }
 
         [Required]
-        [StringLength(500, MinimumLength = 20)]
+        [MaxLength(500)]
         public string Description { get; set; } = null!;
 
         [Required]
-        [StringLength(600)]
+        [MaxLength(600)]
         public string ImageUrl { get; set; } = null!;
     }
 }

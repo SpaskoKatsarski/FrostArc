@@ -1,10 +1,11 @@
 ﻿namespace FrostArc.Data
 {
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     using FrostArc.Data.Models;
 
-    public class FrostArcDbContext : DbContext
+    public class FrostArcDbContext : IdentityDbContext
     {
         public FrostArcDbContext(DbContextOptions options) : base(options)
         {
@@ -24,9 +25,11 @@
 
         public DbSet<Comment> Comments { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.ApplyConfigurationsFromAssembly(typeof())
-        //}
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            //modelBuilder.ApplyConfigurationsFromAssembly(typeof())
+
+            base.OnModelCreating(builder);
+        }
     }
 }
