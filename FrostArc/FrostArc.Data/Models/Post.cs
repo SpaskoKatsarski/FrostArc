@@ -34,6 +34,8 @@
         [Range(0, double.MaxValue)]
         public int Dislikes { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         [Required]
         [ForeignKey(nameof(Community))]
         public Guid CommunityId { get; set; }
@@ -42,5 +44,12 @@
         public Community Community { get; set; } = null!;
 
         public ICollection<Comment> Comments { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(User))]
+        public Guid UserId { get; set; }
+
+        [Required]
+        public ApplicationUser User { get; set; } = null!;
     }
 }

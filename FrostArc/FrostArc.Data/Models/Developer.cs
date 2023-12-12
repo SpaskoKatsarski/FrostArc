@@ -25,6 +25,8 @@
         [Required]
         public string ImageUrl { get; set; } = null!;
 
+        public bool IsDeleted { get; set; }
+
         public ICollection<Game> Games { get; set; }
     }
 }

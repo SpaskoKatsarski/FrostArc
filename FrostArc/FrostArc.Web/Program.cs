@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 using FrostArc.Data;
 using FrostArc.Services.Contracts;
 using FrostArc.Services;
+using FrostArc.Data.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,13 +17,15 @@ builder.Services.AddDbContext<FrostArcDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // TODO: Make ApplicationUser enitity and set it up here:
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<FrostArcDbContext>();
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeveloperService, DeveloperService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
 
 WebApplication app = builder.Build();
 

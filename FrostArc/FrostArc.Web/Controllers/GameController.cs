@@ -15,9 +15,9 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string? genreId)
         {
-            IEnumerable<GameListViewModel> games = await this.gameService.GetAllAsync();
+            IEnumerable<GameListViewModel> games = await this.gameService.GetAllAsync(genreId);
 
             return View(games);
         }

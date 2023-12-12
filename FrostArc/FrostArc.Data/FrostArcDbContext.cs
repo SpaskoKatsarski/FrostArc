@@ -4,8 +4,9 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     using FrostArc.Data.Models;
+    using Microsoft.AspNetCore.Identity;
 
-    public class FrostArcDbContext : IdentityDbContext
+    public class FrostArcDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public FrostArcDbContext(DbContextOptions options) : base(options)
         {

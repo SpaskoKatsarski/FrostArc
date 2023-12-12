@@ -16,18 +16,22 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<GameListViewModel>> GetAllAsync()
+        public async Task<IEnumerable<GameListViewModel>> GetAllAsync(string? genreId)
         {
-            return await this.dbContext.Games
-                .AsNoTracking()
-                .Select(g => new GameListViewModel()
-                {
-                    Id = g.Id.ToString(),
-                    Title = g.Title,
-                    ImageUrl = g.ImageUrl
-                })
-                .ToListAsync();
+            IQueryable<Game> query = this.dbContext.Games
+                .AsNoTracking();
+        
+            if (genreId != null)
+            {
+                query = query.Where(g => g.GenreId.ToString() == genreId);
+            }
 
+            return await query.Select(g => new GameListViewModel()
+            {
+                Id = g.Id.ToString(),
+                Title = g.Title,
+                ImageUrl = g.ImageUrl
+            }).ToListAsync();
         }
 
         public async Task<GameDetailsViewModel> GetDetailsAsync(string id)

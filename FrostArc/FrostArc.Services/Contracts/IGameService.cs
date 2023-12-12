@@ -4,7 +4,7 @@
 
     public interface IGameService
     {
-        Task<IEnumerable<GameListViewModel>> GetAllAsync();
+        Task<IEnumerable<GameListViewModel>> GetAllAsync(string? genreId);
 
         Task<GameDetailsViewModel> GetDetailsAsync(string id);
     }

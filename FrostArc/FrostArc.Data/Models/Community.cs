@@ -8,6 +8,7 @@
         {
             this.Id = Guid.NewGuid();
             this.Posts = new HashSet<Post>();
+            this.Users = new HashSet<ApplicationUser>();
         }
 
         [Key]
@@ -19,9 +20,10 @@
 
         public string? ImageUrl { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public ICollection<Post> Posts { get; set; }
 
-        //TODO: Many-to-Many with Users (Members)
-        //      property for Moderator
+        public ICollection<ApplicationUser> Users { get; set; }
     }
 }

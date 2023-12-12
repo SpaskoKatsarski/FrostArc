@@ -40,7 +40,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Community", b =>
@@ -59,7 +59,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Communities");
+                    b.ToTable("Communities", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Developer", b =>
@@ -84,7 +84,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Developers");
+                    b.ToTable("Developers", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Game", b =>
@@ -123,7 +123,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Genre", b =>
@@ -146,7 +146,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Platform", b =>
@@ -168,7 +168,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Platforms");
+                    b.ToTable("Platforms", (string)null);
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Post", b =>
@@ -203,7 +203,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasIndex("CommunityId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("GamePlatform", b =>
@@ -218,7 +218,7 @@ namespace FrostArc.Data.Migrations
 
                     b.HasIndex("PlatformsId");
 
-                    b.ToTable("GamePlatform");
+                    b.ToTable("GamePlatform", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

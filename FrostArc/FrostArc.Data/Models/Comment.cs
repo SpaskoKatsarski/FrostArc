@@ -24,6 +24,13 @@
         [Required]
         public Post Post { get; set; } = null!;
 
-        // TODO: Add user foreign key
+        [Required]
+        [ForeignKey(nameof(User))]
+        public Guid UserId { get; set; }
+
+        [Required]
+        public ApplicationUser User { get; set; } = null!;
+
+        public bool IsDeleted { get; set; }
     }
 }

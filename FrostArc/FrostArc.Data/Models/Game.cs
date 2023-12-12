@@ -34,8 +34,6 @@
         [Required]
         public Genre Genre { get; set; } = null!;
 
-        public ICollection<Platform> Platforms { get; set; }
-
         [Required]
         [MaxLength(500)]
         public string Description { get; set; } = null!;
@@ -43,5 +41,9 @@
         [Required]
         [MaxLength(600)]
         public string ImageUrl { get; set; } = null!;
+
+        public bool IsDeleted { get; set; }
+
+        public ICollection<Platform> Platforms { get; set; }
     }
 }
