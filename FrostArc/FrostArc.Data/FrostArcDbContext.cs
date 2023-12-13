@@ -8,7 +8,7 @@
 
     public class FrostArcDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        public FrostArcDbContext(DbContextOptions options) : base(options)
+        public FrostArcDbContext(DbContextOptions<FrostArcDbContext> options) : base(options)
         {
         }
 
