@@ -2,9 +2,10 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity;
 
     using FrostArc.Data.Models;
-    using Microsoft.AspNetCore.Identity;
+    using FrostArc.Data.Configurations;
 
     public class FrostArcDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
@@ -28,7 +29,7 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //modelBuilder.ApplyConfigurationsFromAssembly(typeof())
+            builder.ApplyConfigurationsFromAssembly(typeof(GameEntityTypeConfiguration).Assembly);
 
             base.OnModelCreating(builder);
         }

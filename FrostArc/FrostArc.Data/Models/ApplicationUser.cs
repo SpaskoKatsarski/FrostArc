@@ -16,7 +16,7 @@
 
         [Required]
         [MaxLength(50)]
-        public string Username { get; set; } = null!;
+        public string DisplayName { get; set; } = null!;
 
         public ICollection<Comment> Comments { get; set; }
 

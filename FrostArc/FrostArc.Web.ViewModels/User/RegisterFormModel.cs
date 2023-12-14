@@ -16,16 +16,13 @@
         public string Password { get; set; } = null!;
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
+        [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = null!;
 
         [Required]
-        [StringLength(20, MinimumLength = 1)]
-        public string FirstName { get; set; } = null!;
-
-        [Required]
-        [StringLength(20, MinimumLength = 1)]
-        public string LastName { get; set; } = null!;
+        [Display(Name = "Display Name")]
+        [StringLength(50, MinimumLength = 1)]
+        public string DisplayName { get; set; } = null!;
     }
 }
