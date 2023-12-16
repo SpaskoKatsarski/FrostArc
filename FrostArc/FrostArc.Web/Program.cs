@@ -17,7 +17,13 @@ builder.Services.AddDbContext<FrostArcDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // TODO: Make ApplicationUser enitity and set it up here:
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+})
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<FrostArcDbContext>();
 
