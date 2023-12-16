@@ -21,5 +21,7 @@
         Task AddUserToCommunityAsync(string communityId, string userId);
 
         Task<IEnumerable<CommunityAllViewModel>> GetCommunitiesForUserAsync(string userId);
+
+        Task<IEnumerable<CommunityAllViewModel>> GetTop3Async();
     }
 }

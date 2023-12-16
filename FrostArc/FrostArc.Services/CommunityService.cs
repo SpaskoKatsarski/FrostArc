@@ -126,6 +126,25 @@
             return community.Users.Count;
         }
 
+        public async Task<IEnumerable<CommunityAllViewModel>> GetTop3Async()
+        {
+            IEnumerable<CommunityAllViewModel> communitites = await this.context.Communities
+                .OrderByDescending(c => c.Users.Count)
+                .Select(c => new CommunityAllViewModel()
+                {
+                    Id = c.Id.ToString(),
+                    Name = c.Name,
+                    ImageUrl = c.ImageUrl
+                }).ToListAsync();
+
+            if (communitites.Count() < 3)
+            {
+                throw new InvalidOperationException("There are not enough Communities to be presented!");
+            }
+
+            return communitites;
+        }
+
         public async Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr)
         {
             return await this.context.Communities
