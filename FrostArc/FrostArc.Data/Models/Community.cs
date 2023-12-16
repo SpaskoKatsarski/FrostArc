@@ -18,7 +18,13 @@
         [MaxLength(25)]
         public string Name { get; set; } = null!;
 
-        public string? ImageUrl { get; set; }
+        [Required]
+        [MaxLength(1000)]
+        public string Description { get; set; } = null!;
+
+        [Required]
+        [MaxLength(2048)]
+        public string ImageUrl { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
 

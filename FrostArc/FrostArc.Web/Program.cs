@@ -32,6 +32,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeveloperService, DeveloperService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<ICommunityService, CommunityService>();
 
 WebApplication app = builder.Build();
 

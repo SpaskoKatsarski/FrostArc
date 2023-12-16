@@ -22,8 +22,6 @@
         [MaxLength(1000)]
         public string Content { get; set; } = null!;
 
-        //TODO Add Foreign key to User
-
         public string? ImageUrl { get; set; }
 
         [Required]

@@ -78,7 +78,6 @@
                 return View(model);
             }
 
-            // TODO: Fix result
             var result =
                 await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
