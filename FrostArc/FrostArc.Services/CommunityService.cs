@@ -9,16 +9,16 @@
 
     public class CommunityService : ICommunityService
     {
-        private FrostArcDbContext context;
+        private FrostArcDbContext dbContext;
 
-        public CommunityService(FrostArcDbContext context)
+        public CommunityService(FrostArcDbContext dbContext)
         {
-            this.context = context;
+            this.dbContext = dbContext;
         }
 
         public async Task AddUserToCommunityAsync(string communityId, string userId)
         {
-            Community? community = await this.context.Communities
+            Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -26,7 +26,7 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            ApplicationUser? user = await this.context.Users
+            ApplicationUser? user = await this.dbContext.Users
                 .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
@@ -35,7 +35,7 @@
             }
 
             user.Communities.Add(community);
-            await this.context.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task CreateAsync(CommunityFormViewModel model)
@@ -47,13 +47,13 @@
                 ImageUrl = model.ImageUrl
             };
 
-            await this.context.Communities.AddAsync(community);
-            await this.context.SaveChangesAsync();
+            await this.dbContext.Communities.AddAsync(community);
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteCommunityAsync(string communityId)
         {
-            Community? community = await this.context.Communities
+            Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -61,13 +61,13 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            this.context.Remove(community);
-            await this.context.SaveChangesAsync();
+            this.dbContext.Remove(community);
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<CommunityAllViewModel> FindAsync(string communityId)
         {
-            Community? community = await this.context.Communities
+            Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -85,7 +85,7 @@
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync()
         {
-            return await this.context.Communities
+            return await this.dbContext.Communities
                 .Select(c => new CommunityAllViewModel
                 {
                     Id = c.Id.ToString(),
@@ -96,7 +96,7 @@
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetCommunitiesForUserAsync(string userId)
         {
-            ApplicationUser? user = await this.context.Users
+            ApplicationUser? user = await this.dbContext.Users
                 .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
@@ -115,7 +115,7 @@
 
         public async Task<int> GetMembersCountAsync(string communityId)
         {
-            Community? community = await this.context.Communities
+            Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -128,7 +128,7 @@
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetTop3Async()
         {
-            IEnumerable<CommunityAllViewModel> communitites = await this.context.Communities
+            IEnumerable<CommunityAllViewModel> communitites = await this.dbContext.Communities
                 .OrderByDescending(c => c.Users.Count)
                 .Select(c => new CommunityAllViewModel()
                 {
@@ -147,7 +147,7 @@
 
         public async Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr)
         {
-            return await this.context.Communities
+            return await this.dbContext.Communities
                 .Where(c => c.Name.StartsWith(queryStr))
                 .Select(c => new CommunityAllViewModel()
                 {
@@ -159,7 +159,7 @@
 
         public async Task UpdateCommunityAsync(CommunityFormViewModel updateModel)
         {
-            Community? community = await this.context.Communities
+            Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == updateModel.Id);
 
             if (community == null)

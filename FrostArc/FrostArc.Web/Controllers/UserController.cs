@@ -6,16 +6,20 @@
 
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.User;
+    using FrostArc.Services.Contracts;
 
     public class UserController : Controller
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public UserController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        private IUserService userService;
+
+        public UserController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IUserService userService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -87,6 +91,21 @@
             }
 
             return Redirect(model.ReturnUrl ?? "/Home/Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            try
+            {
+                UserDetailsViewModel model = await this.userService.GetInfoAsync(id);
+
+                return View(model);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
         }
     }
 }

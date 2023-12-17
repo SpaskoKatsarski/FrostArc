@@ -1,0 +1,70 @@
+﻿@using FrostArc.Services.Contracts
+@model UserDetailsViewModel
+@inject IUserService userService;
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+<h2>User Profile</h2>
+<div class="user-profile">
+    <h3>@Model.DisplayName</h3>
+    <img src="@Model.ProfilePicture" alt="Profile Picture" style="width:150px;height:150px;" />
+</div>
+
+<hr />
+
+<h2>Posts</h2>
+@foreach (var post in Model.Posts)
+{
+    <div class="post">
+        <h3>@post.Title</h3>
+        <p>@post.Content</p>
+        @if (!string.IsNullOrEmpty(post.ImageUrl))
+        {
+            <img src="@post.ImageUrl" alt="Post Image" style="max-width:100%;" />
+        }
+        <p>Likes: @post.Likes | Dislikes: @post.Dislikes</p>
+        <div>
+            <h4>Comments</h4>
+            @foreach (var comment in post.Comments)
+            {
+                UserDetailsViewModel currUser = await userService.GetInfoAsync(comment.UserId);
+
+                <a asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@currUser.Id">
+                    @currUser.DisplayName:
+                </a>
+                <p>@comment.Content</p>
+            }
+        </div>
+    </div>
+    <hr />
+}
+
+<h2>Communities</h2>
+<div class="communities">
+    @foreach (var community in Model.Communitites)
+    {
+        <div class="community">
+            <h3>@community.Name</h3>
+            <img src="@community.ImageUrl" alt="@community.Name" style="width:100px;height:100px;" />
+        </div>
+    }
+</div>
+
+<style>
+    .user-profile, .post, .community {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+        .user-profile img, .community img {
+            margin-bottom: 10px;
+        }
+
+        .post img {
+            max-width: 500px;
+            height: auto;
+        }
+</style>

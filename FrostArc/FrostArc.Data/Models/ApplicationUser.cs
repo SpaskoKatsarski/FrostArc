@@ -18,6 +18,9 @@
         [MaxLength(50)]
         public string DisplayName { get; set; } = null!;
 
+        [MaxLength(2048)]
+        public string? ProfilePicture { get; set; }
+
         public ICollection<Comment> Comments { get; set; }
 
         public ICollection<Community> Communities { get; set; }
