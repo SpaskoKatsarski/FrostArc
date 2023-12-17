@@ -107,5 +107,25 @@
                 return BadRequest(ae.Message);
             }
         }
+
+        [HttpPost]
+        public IActionResult ChangePicture()
+        {
+            return View(new UserProfilePictureViewModel()
+            {
+                // TODO: fill UserId
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePicture(UserProfilePictureViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            return Ok();
+        }
     }
 }

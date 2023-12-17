@@ -1,0 +1,21 @@
+﻿@model UserProfilePictureViewModel
+
+@{
+    ViewData["Title"] = "Update Profile Picture";
+}
+
+<h2>Update Profile Picture</h2>
+
+<form asp-action="ChangePicture" method="post">
+    <div class="form-group">
+        <label asp-for="ImageUrl" for="newProfilePictureUrl">New Profile Picture URL</label>
+        <input asp-for="ImageUrl" type="text" class="form-control" placeholder="Enter image URL" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Picture</button>
+</form>
+
+<style>
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
