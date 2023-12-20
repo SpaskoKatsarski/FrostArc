@@ -77,5 +77,32 @@
                 })
             };
         }
+
+        public async Task<string> GetUserImageUrlAsync(string userId)
+        {
+            ApplicationUser? user = await this.dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with the provided ID does not exist!");
+            }
+
+            return user.ProfilePicture;
+        }
+
+        public async Task UpdateAvatarAsync(string userId, string imageUrl)
+        {
+            ApplicationUser? user = await this.dbContext.Users
+               .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with the provided ID does not exist!");
+            }
+
+            user.ProfilePicture = imageUrl;
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

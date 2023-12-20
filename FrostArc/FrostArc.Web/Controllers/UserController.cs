@@ -1,13 +1,17 @@
 ﻿namespace FrostArc.Web.Controllers
 {
+    using System.Security.Claims;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
 
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.User;
     using FrostArc.Services.Contracts;
 
+    [Authorize]
     public class UserController : Controller
     {
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -23,12 +27,14 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterFormModel model)
         {
             if (!ModelState.IsValid)
@@ -62,6 +68,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string? returnUrl)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -75,6 +82,7 @@
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginFormModel model)
         {
             if (!ModelState.IsValid)
@@ -108,24 +116,35 @@
             }
         }
 
-        [HttpPost]
-        public IActionResult ChangePicture()
-        {
-            return View(new UserProfilePictureViewModel()
+            [HttpGet]
+            public IActionResult ChangePicture()
             {
-                // TODO: fill UserId
-            });
-        }
+                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-        [HttpPost]
-        public async Task<IActionResult> ChangePicture(UserProfilePictureViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
+                return View(new UserProfilePictureViewModel()
+                {
+                    UserId = userId
+                });
             }
 
-            return Ok();
-        }
+            [HttpPost]
+            public async Task<IActionResult> ChangePicture(UserProfilePictureViewModel model)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                try
+                {
+                    await this.userService.UpdateAvatarAsync(model.UserId, model.ImageUrl);
+
+                    return RedirectToAction("Details", "User", new { id = model.UserId });
+                }
+                catch (ArgumentException ae)
+                {
+                    return BadRequest(ae.Message);
+                }
+            }
     }
 }

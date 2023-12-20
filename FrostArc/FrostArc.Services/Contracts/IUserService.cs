@@ -7,5 +7,9 @@
         Task<string> GetDisplayNameAsync(string userId);
 
         Task<UserDetailsViewModel> GetInfoAsync(string userId);
+
+        Task<string> GetUserImageUrlAsync(string userId);
+
+        Task UpdateAvatarAsync(string userId, string imageUrl);
     }
 }

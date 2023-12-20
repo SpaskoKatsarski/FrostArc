@@ -1,11 +1,12 @@
 ﻿namespace FrostArc.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
 
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Developer;
 
-    //TODO Implement
+    [Authorize]
     public class DeveloperController : Controller
     {
         private IDeveloperService developerService;
@@ -16,6 +17,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> All()
         {
             IEnumerable<DeveloperAllViewModel> devs = await this.developerService.GetAllAsync();
@@ -24,6 +26,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             DeveloperDetailsViewModel dev = await this.developerService.GetDetailsAsync(id);
