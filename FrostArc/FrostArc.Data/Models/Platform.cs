@@ -17,9 +17,6 @@
         public string Name { get; set; } = null!;
 
         [Required]
-        public string ImageUrl { get; set; } = null!;
-
-        [Required]
         [MaxLength(500)]
         public string Description { get; set; } = null!;
 
