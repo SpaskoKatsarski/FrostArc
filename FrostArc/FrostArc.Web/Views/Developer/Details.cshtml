@@ -14,7 +14,7 @@
         @foreach (var game in Model.Games)
         {
             <li>
-                <img src="@game.ImageUrl" />
+                <img class="img-thumbnail" src="@game.ImageUrl" />
                 <a asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">@game.Title</a>
             </li>
         }

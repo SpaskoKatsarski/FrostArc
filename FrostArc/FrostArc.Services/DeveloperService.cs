@@ -33,6 +33,7 @@
         public async Task<DeveloperDetailsViewModel> GetDetailsAsync(string id)
         {
             Developer? dev = await this.dbContext.Developers
+                .Include(d => d.Games)
                 .FirstOrDefaultAsync(d => d.Id.ToString() == id);
 
             if (dev == null)

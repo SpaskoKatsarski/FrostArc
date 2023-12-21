@@ -40,6 +40,7 @@
                 .Include(g => g.Developer)
                 .Include(g => g.Genre)
                 .Include(g => g.GamePlatforms)
+                .ThenInclude(gp => gp.Platform)
                 .FirstOrDefaultAsync(g => g.Id.ToString() == id);
 
             if (game == null)
@@ -54,6 +55,7 @@
                 Description = game.Description,
                 ImageUrl = game.ImageUrl,
                 Developer = game.Developer.Name,
+                DeveloperId = game.DeveloperId.ToString(),
                 Genre = game.Genre.Name,
                 Platforms = game.GamePlatforms.Select(gp => gp.Platform.Name)
             };

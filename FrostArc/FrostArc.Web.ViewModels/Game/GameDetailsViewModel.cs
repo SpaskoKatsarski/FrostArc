@@ -10,6 +10,8 @@
 
         public string ImageUrl { get; set; } = null!;
 
+        public string DeveloperId { get; set; } = null!;
+
         public string Developer { get; set; } = null!;
 
         public string Genre { get; set; } = null!;

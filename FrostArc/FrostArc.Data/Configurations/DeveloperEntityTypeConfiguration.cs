@@ -63,7 +63,7 @@
                     Id = new Guid("7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e"),
                     Name = "Valve Corporation",
                     Description = "American video game developer, publisher and digital distribution company, known for Dota 2.",
-                    ImageUrl = "https://static.wikia.nocookie.net/half-life/images/6/68/2560px-Valve_logo.svg.png/revision/latest?cb=20200325103915&path-prefix=en"
+                    ImageUrl = "https://pbs.twimg.com/profile_images/1196563043150204928/X6pfa2YZ_400x400.jpg"
                 },
                 new Developer
                 {

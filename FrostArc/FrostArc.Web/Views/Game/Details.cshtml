@@ -6,10 +6,10 @@
 
 <h2>@Model.Title</h2>
 
-<div class="game-details">
-    <img src="@Model.ImageUrl" alt="Image of @Model.Title" class="game-image" />
+<div>
+    <img src="@Model.ImageUrl" alt="Image of @Model.Title" class="img-thumbnail" />
     <p>@Model.Description</p>
-    <p><strong>Developer:</strong> @Model.Developer</p>
+    <p><strong>Developer:</strong><a style="text-decoration: none;" asp-area="" asp-controller="Developer" asp-action="Details" asp-route-id="@Model.DeveloperId"> @Model.Developer</a></p>
     <p><strong>Genre:</strong> @Model.Genre</p>
     <h3>Available on Platforms:</h3>
     <ul>
