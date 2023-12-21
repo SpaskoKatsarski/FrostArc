@@ -39,7 +39,7 @@
             Game? game = await this.dbContext.Games
                 .Include(g => g.Developer)
                 .Include(g => g.Genre)
-                .Include(g => g.Platforms)
+                .Include(g => g.GamePlatforms)
                 .FirstOrDefaultAsync(g => g.Id.ToString() == id);
 
             if (game == null)
@@ -55,7 +55,7 @@
                 ImageUrl = game.ImageUrl,
                 Developer = game.Developer.Name,
                 Genre = game.Genre.Name,
-                Platforms = game.Platforms.Select(p => p.Name)
+                Platforms = game.GamePlatforms.Select(gp => gp.Platform.Name)
             };
         }
     }

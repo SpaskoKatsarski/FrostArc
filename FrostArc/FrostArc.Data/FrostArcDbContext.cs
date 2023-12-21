@@ -27,6 +27,8 @@
 
         public DbSet<Comment> Comments { get; set; }
 
+        public DbSet<GamePlatform> GamesPlatforms { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(GameEntityTypeConfiguration).Assembly);

@@ -8,7 +8,7 @@
         public Game()
         {
             this.Id = Guid.NewGuid();
-            this.Platforms = new HashSet<Platform>();
+            this.GamePlatforms = new HashSet<GamePlatform>();
         }
 
         [Key]
@@ -44,6 +44,6 @@
 
         public bool IsDeleted { get; set; }
 
-        public ICollection<Platform> Platforms { get; set; }
+        public ICollection<GamePlatform> GamePlatforms { get; set; }
     }
 }

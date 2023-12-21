@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FrostArc.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Initital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +33,7 @@ namespace FrostArc.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false, defaultValue: "https://cdn-icons-png.flaticon.com/512/1053/1053244.png"),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -57,7 +60,8 @@ namespace FrostArc.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -102,7 +106,7 @@ namespace FrostArc.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -280,7 +284,8 @@ namespace FrostArc.Data.Migrations
                     GenreId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(600)", maxLength: 600, nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    PlatformId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,6 +299,11 @@ namespace FrostArc.Data.Migrations
                         name: "FK_Games_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Games_Platforms_PlatformId",
+                        column: x => x.PlatformId,
+                        principalTable: "Platforms",
                         principalColumn: "Id");
                 });
 
@@ -325,27 +335,152 @@ namespace FrostArc.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GamePlatform",
+                name: "GamesPlatforms",
                 columns: table => new
                 {
-                    GamesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PlatformsId = table.Column<int>(type: "int", nullable: false)
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlatformId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GamePlatform", x => new { x.GamesId, x.PlatformsId });
+                    table.PrimaryKey("PK_GamesPlatforms", x => new { x.GameId, x.PlatformId });
                     table.ForeignKey(
-                        name: "FK_GamePlatform_Games_GamesId",
-                        column: x => x.GamesId,
+                        name: "FK_GamesPlatforms_Games_GameId",
+                        column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GamePlatform_Platforms_PlatformsId",
-                        column: x => x.PlatformsId,
+                        name: "FK_GamesPlatforms_Platforms_PlatformId",
+                        column: x => x.PlatformId,
                         principalTable: "Platforms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Communities",
+                columns: new[] { "Id", "Description", "ImageUrl", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("45780d53-622b-4b5b-8e0c-c5af643d9ea2"), "Community for enthusiasts of the Grand Theft Auto series.", "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png", false, "Grand Theft Auto" },
+                    { new Guid("48b7aede-6de7-4c50-b605-4be177f62eff"), "A community for fans of The Witcher series.", "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmHlktOHar3lVl6rY.png", false, "The Witcher Series" },
+                    { new Guid("60877472-373f-457d-b11b-527c5d019587"), "For fans of the Elder Scrolls series.", "https://esosslfiles-a.akamaihd.net/cms/2021/11/f5059a45d236626bd8ba7433c488bbe7.jpg", false, "Elder Scrolls" },
+                    { new Guid("7c62cf59-59fe-4ef2-ac6b-2889e4aff373"), "Community for League of Legends players and enthusiasts.", "https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-872a966297484acd0efe49f34edd5aed", false, "League of Legends" },
+                    { new Guid("8e307a81-f269-4c9c-b800-bf0a3926e919"), "Fans of the Assassin's Creed series unite here.", "https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/449BBgnc3Q1ha2IN9rh3bR/e1077125021162ce2d59820739c316e7/ACEC_Keyart_00_00_00_mobile.jpg", false, "Assassin's Creed" },
+                    { new Guid("90c59384-bbfd-4a37-a14f-86094c024c47"), "A gathering spot for Call of Duty players.", "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/mw2/home/reveal/new-era/new_era-mw2.jpg", false, "Call of Duty" },
+                    { new Guid("a31aa622-1e7d-491a-b471-b1c72e1836ee"), "A place for Overwatch players and fans.", "https://media.wired.com/photos/642c752dc18cf0c5f132190d/master/pass/Overwatch-2-Lifeweaver-Gear.jpg", false, "Overwatch" },
+                    { new Guid("c7c19472-58cb-43f4-87a1-4a05dd51d1d1"), "A community for lovers of the Final Fantasy series.", "https://fyre.cdn.sewest.net/ffvii-hub/6471442498774a5fd66555de/pub106_cloud_zack_sephiroth-3-1--ga4rX0dsG.jpg?quality=85&width=3840", false, "Final Fantasy" },
+                    { new Guid("e6d46afa-5f5a-4cb0-b468-3f6da2dc70ac"), "A community for Diablo 3 enthusiasts.", "https://upload.wikimedia.org/wikipedia/en/8/80/Diablo_III_cover.png", false, "Diablo 3" },
+                    { new Guid("fd07abf5-45a2-48f9-a2e1-8af8a88d28f5"), "A hub for Dota 2 players of all levels.", "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota2_social.jpg", false, "Dota 2" },
+                    { new Guid("ffe5c080-2bac-4682-a623-b52559c0e98a"), "A community dedicated to the challenging world of Dark Souls.", "https://media.wired.co.uk/photos/606db938d051e15de128ccb1/4:3/w_2876,h_2157,c_limit/crop.jpg", false, "Dark Souls" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Developers",
+                columns: new[] { "Id", "Description", "ImageUrl", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b"), "American video game publisher, famous for the Grand Theft Auto series.", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Rockstar_Games_Logo.svg/1200px-Rockstar_Games_Logo.svg.png", false, "Rockstar Games" },
+                    { new Guid("1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"), "Polish video game developer known for The Witcher series.", "https://upload.wikimedia.org/wikipedia/en/thumb/6/68/CD_Projekt_logo.svg/1200px-CD_Projekt_logo.svg.png", false, "CD Projekt Red" },
+                    { new Guid("2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f"), "American video game developer, creator of the Call of Duty series.", "https://static.wikia.nocookie.net/cod_esports_gamepedia_en/images/d/d7/Infinty_Ward_logo.png/revision/latest?cb=20200707211638", false, "Infinity Ward" },
+                    { new Guid("3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a"), "American video game developer known for League of Legends.", "https://www.riotgames.com/darkroom/800/87521fcaeca5867538ae7f46ac152740:2f8144e17957078916e41d2410c111c3/002-rg-2021-full-lockup-offwhite.jpg", false, "Riot Games" },
+                    { new Guid("4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b"), "American video game developer, famous for the Elder Scrolls series.", "https://images.ctfassets.net/rporu91m20dc/4gNvwblcIUQMAa0QWakgAk/64625a987bad1812862748367703938b/BGS_LargeHero_Future.jpg", false, "Bethesda Game Studios" },
+                    { new Guid("5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c"), "Japanese video game development company, renowned for the Dark Souls series.", "https://static.wikia.nocookie.net/sony-playstation/images/f/fe/FromSoftware_logo_black_background.png/revision/latest?cb=20220901192200", false, "FromSoftware" },
+                    { new Guid("6a7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d"), "French video game company, known for creating the Assassin's Creed series.", "https://staticctf.akamaized.net/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/3h4s0GE47IBDxheVyJkfuX/e854163c0246c91bd79f390e9414391e/ubisoft_logo_whiteonblack_960x540_351175.jpg", false, "Ubisoft" },
+                    { new Guid("7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e"), "American video game developer, publisher and digital distribution company, known for Dota 2.", "https://static.wikia.nocookie.net/half-life/images/6/68/2560px-Valve_logo.svg.png/revision/latest?cb=20200325103915&path-prefix=en", false, "Valve Corporation" },
+                    { new Guid("8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f"), "Japanese video game developer, publisher, and distribution company, famous for the Final Fantasy series.", "https://www.hd.square-enix.com/eng/assets/img/og/ogp_square-enix.png", false, "Square Enix" },
+                    { new Guid("9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a"), "American video game developer and publisher, known for Overwatch.", "https://blz-contentstack-images.akamaized.net/v3/assets/blta8f9a8e092360c6c/bltbe1a42777abcc0da/620d1898a38b0106946f17d2/thumbnail-home.jpg", false, "Blizzard Entertainment" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "Description", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Games emphasizing physical challenges, including hand–eye coordination and reaction time.", false, "Action" },
+                    { 2, "Games focusing on exploration, puzzle-solving, and narrative.", false, "Adventure" },
+                    { 3, "Games where players assume the roles of characters in a fictional setting.", false, "RPG (Role-Playing Game)" },
+                    { 4, "Games designed to simulate real-world activities.", false, "Simulation" },
+                    { 5, "Games where the focus is on strategic decision making.", false, "Strategy" },
+                    { 6, "Games that simulate the playing of sports.", false, "Sports" },
+                    { 7, "Games that involve racing against opponents.", false, "Racing" },
+                    { 8, "Games centered around close-ranged combat between a limited number of characters.", false, "Fighting" },
+                    { 9, "Games focusing on combat with various firearms.", false, "Shooter" },
+                    { 10, "Online games capable of supporting large numbers of players simultaneously.", false, "MMO (Massively Multiplayer Online)" },
+                    { 11, "Games featuring two opposing teams competing against each other.", false, "MOBA (Multiplayer Online Battle Arena)" },
+                    { 12, "Games designed to scare the player with an ominous atmosphere and chilling storylines.", false, "Horror" },
+                    { 13, "Games that challenge the player's problem-solving skills.", false, "Puzzle" },
+                    { 14, "Games that challenge the player's sense of rhythm and music timing.", false, "Music/Rhythm" },
+                    { 15, "Games with an educational component, often aimed at younger players.", false, "Educational" },
+                    { 16, "Games focusing on jumping and climbing through levels with uneven terrain.", false, "Platformer" },
+                    { 17, "Games where players often engage in gameplay focused on stealth and not being seen.", false, "Stealth" },
+                    { 18, "Games focusing on survival of the player as a primary goal.", false, "Survival" },
+                    { 19, "Games designed to be played using virtual reality equipment.", false, "VR (Virtual Reality)" },
+                    { 20, "Games that blend the real-world environment with game elements.", false, "AR (Augmented Reality)" },
+                    { 21, "Games produced by individual developers or small teams without substantial financial backing.", false, "Indie" },
+                    { 22, "Games that allow a high degree of player freedom with minimal limitations.", false, "Sandbox" },
+                    { 23, "Games featuring large numbers of players competing to be the last person standing.", false, "Battle Royale" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Platforms",
+                columns: new[] { "Id", "Description", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Games available for personal computers.", false, "PC" },
+                    { 2, "Games available for PlayStation consoles.", false, "PlayStation" },
+                    { 3, "Games available for Xbox consoles.", false, "Xbox" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Games",
+                columns: new[] { "Id", "Description", "DeveloperId", "GenreId", "ImageUrl", "IsDeleted", "PlatformId", "ReleaseDate", "Title" },
+                values: new object[,]
+                {
+                    { new Guid("006ac6dc-26d9-4524-a5d1-ed1f4a1b6a04"), "A first-person shooter with intense campaigns and multiplayer modes.", new Guid("2c3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f"), 9, "https://example.com/cod_mw_image.png", false, null, new DateTime(2019, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), "Call of Duty: Modern Warfare" },
+                    { new Guid("07d121f2-1896-4397-a014-3f3b0dd5e55e"), "An open-world action RPG set in a detailed fantasy world.", new Guid("4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b"), 3, "https://example.com/skyrim_image.png", false, null, new DateTime(2011, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Elder Scrolls V: Skyrim" },
+                    { new Guid("1a7db5c2-a562-4828-bc20-84c6021a5623"), "A highly popular multiplayer online battle arena game.", new Guid("3d4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a"), 11, "https://example.com/lol_image.png", false, null, new DateTime(2009, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), "League of Legends" },
+                    { new Guid("2b5cb595-19b5-445d-9f45-b6189687f483"), "A challenging and intricate action RPG known for its difficulty.", new Guid("5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c"), 3, "https://example.com/darksouls3_image.png", false, null, new DateTime(2016, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dark Souls III" },
+                    { new Guid("32bb0d8c-9d51-400b-b4a8-e3f8fe704af0"), "An open-world RPG set in a gritty fantasy universe.", new Guid("1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d"), 3, "https://example.com/witcher3_image.png", false, null, new DateTime(2015, 5, 19, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Witcher 3: Wild Hunt" },
+                    { new Guid("56b33636-b50f-4c0f-940a-8f361428b330"), "A fantasy RPG with an emphasis on fast-paced action and character-driven storytelling.", new Guid("8c9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f"), 3, "https://example.com/ffxv_image.png", false, null, new DateTime(2016, 11, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "Final Fantasy XV" },
+                    { new Guid("653964dc-2cbd-4ba7-96dd-a5ebc0f59508"), "A team-based multiplayer first-person shooter with a wide range of unique heroes.", new Guid("9d0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a"), 9, "https://example.com/overwatch_image.png", false, null, new DateTime(2016, 5, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "Overwatch" },
+                    { new Guid("6de757b8-ee9d-4347-9845-a2c95c295749"), "An action RPG set in ancient Greece, part of the Assassin's Creed series.", new Guid("6a7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d"), 3, "https://example.com/ac_odyssey_image.png", false, null, new DateTime(2018, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "Assassin's Creed Odyssey" },
+                    { new Guid("94640685-0e93-47aa-81aa-ff19991dc088"), "An action-adventure game set in a fictional state, featuring an open world and a story-driven campaign.", new Guid("0e1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b"), 2, "https://example.com/gtav_image.png", false, null, new DateTime(2013, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified), "Grand Theft Auto V" },
+                    { new Guid("e15f1653-b0ef-4512-969c-1b3b6594251e"), "A popular MOBA game known for its strategic depth and complexity.", new Guid("7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e"), 11, "https://example.com/dota2_image.png", false, null, new DateTime(2013, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dota 2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GamesPlatforms",
+                columns: new[] { "GameId", "PlatformId" },
+                values: new object[,]
+                {
+                    { new Guid("006ac6dc-26d9-4524-a5d1-ed1f4a1b6a04"), 1 },
+                    { new Guid("006ac6dc-26d9-4524-a5d1-ed1f4a1b6a04"), 2 },
+                    { new Guid("006ac6dc-26d9-4524-a5d1-ed1f4a1b6a04"), 3 },
+                    { new Guid("07d121f2-1896-4397-a014-3f3b0dd5e55e"), 1 },
+                    { new Guid("07d121f2-1896-4397-a014-3f3b0dd5e55e"), 2 },
+                    { new Guid("07d121f2-1896-4397-a014-3f3b0dd5e55e"), 3 },
+                    { new Guid("1a7db5c2-a562-4828-bc20-84c6021a5623"), 1 },
+                    { new Guid("2b5cb595-19b5-445d-9f45-b6189687f483"), 1 },
+                    { new Guid("2b5cb595-19b5-445d-9f45-b6189687f483"), 2 },
+                    { new Guid("2b5cb595-19b5-445d-9f45-b6189687f483"), 3 },
+                    { new Guid("32bb0d8c-9d51-400b-b4a8-e3f8fe704af0"), 1 },
+                    { new Guid("32bb0d8c-9d51-400b-b4a8-e3f8fe704af0"), 2 },
+                    { new Guid("32bb0d8c-9d51-400b-b4a8-e3f8fe704af0"), 3 },
+                    { new Guid("56b33636-b50f-4c0f-940a-8f361428b330"), 1 },
+                    { new Guid("56b33636-b50f-4c0f-940a-8f361428b330"), 2 },
+                    { new Guid("56b33636-b50f-4c0f-940a-8f361428b330"), 3 },
+                    { new Guid("653964dc-2cbd-4ba7-96dd-a5ebc0f59508"), 1 },
+                    { new Guid("653964dc-2cbd-4ba7-96dd-a5ebc0f59508"), 2 },
+                    { new Guid("653964dc-2cbd-4ba7-96dd-a5ebc0f59508"), 3 },
+                    { new Guid("6de757b8-ee9d-4347-9845-a2c95c295749"), 1 },
+                    { new Guid("6de757b8-ee9d-4347-9845-a2c95c295749"), 2 },
+                    { new Guid("6de757b8-ee9d-4347-9845-a2c95c295749"), 3 },
+                    { new Guid("94640685-0e93-47aa-81aa-ff19991dc088"), 1 },
+                    { new Guid("94640685-0e93-47aa-81aa-ff19991dc088"), 2 },
+                    { new Guid("94640685-0e93-47aa-81aa-ff19991dc088"), 3 },
+                    { new Guid("e15f1653-b0ef-4512-969c-1b3b6594251e"), 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -403,11 +538,6 @@ namespace FrostArc.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GamePlatform_PlatformsId",
-                table: "GamePlatform",
-                column: "PlatformsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Games_DeveloperId",
                 table: "Games",
                 column: "DeveloperId");
@@ -416,6 +546,16 @@ namespace FrostArc.Data.Migrations
                 name: "IX_Games_GenreId",
                 table: "Games",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Games_PlatformId",
+                table: "Games",
+                column: "PlatformId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GamesPlatforms_PlatformId",
+                table: "GamesPlatforms",
+                column: "PlatformId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_CommunityId",
@@ -453,7 +593,7 @@ namespace FrostArc.Data.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "GamePlatform");
+                name: "GamesPlatforms");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -463,9 +603,6 @@ namespace FrostArc.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
-
-            migrationBuilder.DropTable(
-                name: "Platforms");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
@@ -478,6 +615,9 @@ namespace FrostArc.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "Platforms");
         }
     }
 }
