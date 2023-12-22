@@ -15,6 +15,8 @@
 
         public int MembersCount { get; set; }
 
+        public string OwnerId { get; set; } = null!;
+
         public IEnumerable<PostAllViewModel> Posts { get; set; } = null!;
 
         public IEnumerable<UserAllViewModel> Users { get; set; } = null!;

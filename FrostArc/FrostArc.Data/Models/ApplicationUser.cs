@@ -1,6 +1,7 @@
 ﻿namespace FrostArc.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Microsoft.AspNetCore.Identity;
 
@@ -25,6 +26,9 @@
         public ICollection<Comment> Comments { get; set; }
 
         public ICollection<Community> Communities { get; set; }
+
+        [InverseProperty(nameof(Community.Owner))]
+        public ICollection<Community> OwnedCommunities { get; set; }
 
         public ICollection<Post> Posts { get; set; }
     }

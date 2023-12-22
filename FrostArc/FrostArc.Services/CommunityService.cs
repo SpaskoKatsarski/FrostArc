@@ -152,7 +152,8 @@
                     {
                         Id = u.Id.ToString(),
                         DisplayName = u.DisplayName
-                    })
+                    }),
+                OwnerId = community.OwnerId.ToString()
             };
         }
 
