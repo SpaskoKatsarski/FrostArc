@@ -1,0 +1,31 @@
+﻿@model CommunityDetailsViewModel
+
+<h2>@Model.Name</h2>
+<p>@Model.Description</p>
+
+<img class="img-thumbnail" src="@Model.ImageUrl" alt="Community Image">
+
+<p>Members: @Model.MembersCount</p>
+
+@if (Model.Users.Any())
+{
+    <h3>Users</h3>
+    <ul>
+        @foreach (var user in Model.Users)
+        {
+            <li>@user.DisplayName</li>
+        }
+    </ul>
+}
+
+@if (Model.Posts.Any())
+{
+    <h3>Posts</h3>
+    <ul>
+        @* Post partial *@
+        @foreach (var post in Model.Posts)
+        {
+            <li>@post.Title - @post.Content</li>
+        }
+    </ul>
+}

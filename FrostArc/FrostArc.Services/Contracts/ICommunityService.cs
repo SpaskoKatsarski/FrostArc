@@ -1,5 +1,6 @@
 ﻿namespace FrostArc.Services.Contracts
 {
+    using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.Community;
 
     public interface ICommunityService
@@ -12,7 +13,7 @@
 
         Task DeleteCommunityAsync(string communityId);
 
-        Task<CommunityAllViewModel> FindAsync(string communityId);
+        Task<Community> FindAsync(string communityId);
 
         Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr);
 
@@ -23,5 +24,7 @@
         Task<IEnumerable<CommunityAllViewModel>> GetCommunitiesForUserAsync(string userId);
 
         Task<IEnumerable<CommunityAllViewModel>> GetTop3Async();
+
+        Task<CommunityDetailsViewModel> GetForDetailsAsync(string id);
     }
 }

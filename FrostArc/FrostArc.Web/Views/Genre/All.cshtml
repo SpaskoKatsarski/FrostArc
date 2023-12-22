@@ -13,13 +13,13 @@
             @foreach (var genre in Model)
             {
                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@genre.Name</h5>
-                            <a asp-controller="Game" asp-action="All" asp-route-id="@genre.Id">
-                            </a>
+                    <a asp-controller="Game" asp-action="All" asp-route-id="@genre.Id" asp-route-genreId="@genre.Id" style="text-decoration: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@genre.Name</h5>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
         </div>

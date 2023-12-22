@@ -31,7 +31,7 @@
         {
             try
             {
-                CommunityAllViewModel community = await this.communityService.FindAsync(id);
+                CommunityDetailsViewModel community = await this.communityService.GetForDetailsAsync(id);
 
                 return View(community);
             }

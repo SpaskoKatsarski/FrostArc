@@ -6,6 +6,9 @@
     using FrostArc.Data.Models;
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Community;
+    using FrostArc.Web.ViewModels.Post;
+    using FrostArc.Web.ViewModels.Comment;
+    using FrostArc.Web.ViewModels.User;
 
     public class CommunityService : ICommunityService
     {
@@ -65,7 +68,7 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<CommunityAllViewModel> FindAsync(string communityId)
+        public async Task<Community> FindAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
@@ -75,12 +78,7 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            return new CommunityAllViewModel()
-            {
-                Id = community.Id.ToString(),
-                Name = community.Name,
-                ImageUrl = community.ImageUrl
-            };
+            return community;
         }
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync()
@@ -111,6 +109,51 @@
                     Name = c.Name,
                     ImageUrl = c.ImageUrl
                 });
+        }
+
+        public async Task<CommunityDetailsViewModel> GetForDetailsAsync(string id)
+        {
+            Community? community = await this.dbContext.Communities
+                .Include(c => c.Posts)
+                .ThenInclude(p => p.Comments)
+                .Include(c => c.Users)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return new CommunityDetailsViewModel()
+            {
+                Id = community.Id.ToString(),
+                Name = community.Name,
+                Description = community.Description,
+                ImageUrl = community.ImageUrl,
+                MembersCount = await this.GetMembersCountAsync(id),
+                Posts = community.Posts
+                    .Select(p => new PostAllViewModel()
+                    {
+                        Id = p.Id.ToString(),
+                        Title = p.Title,
+                        Content = p.Content,
+                        ImageUrl = p.ImageUrl,
+                        Likes = p.Likes,
+                        Dislikes = p.Dislikes,
+                        Comments = p.Comments
+                            .Select(c => new CommentPostViewModel()
+                            {
+                                UserId = c.UserId.ToString(),
+                                Content = c.Content
+                            })
+                    }),
+                Users = community.Users
+                    .Select(u => new UserAllViewModel()
+                    {
+                        Id = u.Id.ToString(),
+                        DisplayName = u.DisplayName
+                    })
+            };
         }
 
         public async Task<int> GetMembersCountAsync(string communityId)
