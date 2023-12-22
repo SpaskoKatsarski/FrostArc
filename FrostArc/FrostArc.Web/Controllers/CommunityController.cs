@@ -40,5 +40,18 @@
                 return BadRequest(ae.Message);
             }
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CommunityFormViewModel model)
+        {
+            // TODO: Add owner and save changes for community to the DB
+            return Ok();
+        }
     }
 }

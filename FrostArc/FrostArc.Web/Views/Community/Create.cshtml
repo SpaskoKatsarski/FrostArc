@@ -1,0 +1,15 @@
+﻿@model CommunityFormViewModel
+
+@{
+    ViewBag.Title = "Create Community";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<partial name="_CommunityFormPartial" model="@Model" />
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
