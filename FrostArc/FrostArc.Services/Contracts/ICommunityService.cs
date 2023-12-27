@@ -7,7 +7,7 @@
     {
         Task<IEnumerable<CommunityAllViewModel>> GetAllAsync();
 
-        Task CreateAsync(CommunityFormViewModel model);
+        Task<Community> CreateAsync(CommunityFormViewModel model, string ownerId);
 
         Task UpdateCommunityAsync(CommunityFormViewModel updateModel);
 
@@ -26,5 +26,11 @@
         Task<IEnumerable<CommunityAllViewModel>> GetTop3Async();
 
         Task<CommunityDetailsViewModel> GetForDetailsAsync(string id);
+
+        Task<CommunityFeedViewModel> GetForFeedAsync(string id);
+
+        Task<bool> IsUserOwnerAsync(string communityId, string userId);
+
+        Task<bool> IsUserMemberAsync(string communityId, string userId);
     }
 }

@@ -18,6 +18,14 @@
                 .HasOne(p => p.Community)
                 .WithMany(c => c.Posts)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .Property(p => p.Likes)
+                .HasDefaultValue(0);
+
+            builder
+                .Property(p => p.Dislikes)
+                .HasDefaultValue(0);
         }
     }
 }

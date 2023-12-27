@@ -1,4 +1,11 @@
-﻿@model CommunityDetailsViewModel
+﻿@using FrostArc.Services.Contracts
+@model CommunityDetailsViewModel
+@inject ICommunityService communityService
+
+@{
+    string userId = User.GetId()!;
+    bool isOwner = await communityService.IsUserOwnerAsync(Model.Id, userId);
+}
 
 <h2>@Model.Name</h2>
 <p>@Model.Description</p>
@@ -7,27 +14,14 @@
 
 <p>Members: @Model.MembersCount</p>
 
-@if (Model.Users.Any())
+@if (isOwner)
 {
-    <h3>Users</h3>
-    <ul>
-        @foreach (var user in Model.Users)
-        {
-            <li>@user.DisplayName</li>
-        }
-    </ul>
+    <div style="margin-top: 20px;">
+        <a asp-controller="Community" asp-action="Edit" asp-route-id="@Model.Id.ToString()" class="btn btn-warning">Modify</a>
+        <a asp-controller="Gun" asp-action="Delete" asp-route-id="@Model.Id.ToString()" class="btn btn-primary">Members</a>
+    </div>
 }
-
-@if (Model.Posts.Any())
+else
 {
-    <h3>Posts</h3>
-    <ul>
-        @* Post partial *@
-        @foreach (var post in Model.Posts)
-        {
-            <li>@post.Title - @post.Content</li>
-        }
-    </ul>
+    <a asp-controller="Community" asp-action="Join" asp-route-id="@Model.Id.ToString()" asp-route-userId="@userId" class="btn btn-success">Join</a>
 }
-
-<p>OwnerId: @Model.OwnerId</p>

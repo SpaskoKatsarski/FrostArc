@@ -1,0 +1,62 @@
+﻿@model CommunityFeedViewModel
+
+@{
+    string userId = User.GetId()!;
+}
+
+<h2>@Model.Name</h2>
+<p>@Model.Description</p>
+
+<img class="img-thumbnail" src="@Model.ImageUrl" alt="Community Image">
+
+<p>Members: @Model.MembersCount</p>
+
+@if (Model.Users.Any())
+{
+    <h3>Users</h3>
+    <ul>
+        @foreach (var user in Model.Users)
+        {
+            <li>@user.DisplayName</li>
+        }
+    </ul>
+}
+
+@if (Model.Posts.Any())
+{
+    <h3>Posts</h3>
+    @foreach (var post in Model.Posts)
+    {
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">@post.Title</h5>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(post.ImageUrl))
+                {
+                    <img src="@post.ImageUrl" class="card-img-top mb-3" alt="Post Image">
+                }
+                <p class="card-text">@post.Content</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <button class="btn btn-primary">👍 @post.Likes</button>
+                        <button class="btn btn-danger">👎 @post.Dislikes</button>
+                    </div>
+                    <small class="text-muted">Posted in @post.Community</small>
+                </div>
+            </div>
+            <div class="card-footer">
+                <h6>Comments:</h6>
+                @foreach (var comment in post.Comments)
+                {
+                    <div class="border-bottom mb-2">
+                        <strong>@comment.UserId:</strong> @comment.Content
+                    </div>
+                }
+                <a class="btn btn-outline-secondary">Write a Comment</a>
+            </div>
+        </div>
+    }
+}
+
+<a asp-controller="Post" asp-action="Create" asp-route-communityId="@Model.Id" class="btn btn-primary">Create Post</a>

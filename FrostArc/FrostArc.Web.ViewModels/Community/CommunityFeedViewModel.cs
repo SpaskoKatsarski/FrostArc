@@ -3,7 +3,7 @@
     using FrostArc.Web.ViewModels.Post;
     using FrostArc.Web.ViewModels.User;
 
-    public class CommunityDetailsViewModel
+    public class CommunityFeedViewModel
     {
         public string Id { get; set; } = null!;
 
@@ -16,5 +16,9 @@
         public int MembersCount { get; set; }
 
         public string OwnerId { get; set; } = null!;
+
+        public IEnumerable<PostAllViewModel> Posts { get; set; } = null!;
+
+        public IEnumerable<UserAllViewModel> Users { get; set; } = null!;
     }
 }

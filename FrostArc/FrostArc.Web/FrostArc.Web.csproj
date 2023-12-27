@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FrostArc.Data\FrostArc.Data.csproj" />
     <ProjectReference Include="..\FrostArc.Services\FrostArc.Services.csproj" />
+    <ProjectReference Include="..\FrostArc.Web.Infrastructire\FrostArc.Web.Infrastructire.csproj" />
     <ProjectReference Include="..\FrostArc.Web.ViewModels\FrostArc.Web.ViewModels.csproj" />
   </ItemGroup>
 

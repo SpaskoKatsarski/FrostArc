@@ -37,21 +37,31 @@
                 throw new ArgumentException("User with the provided ID does not exist!");
             }
 
+            bool isAlreadyMember = await this.IsUserMemberAsync(communityId, userId);
+
+            if (isAlreadyMember)
+            {
+                throw new ArgumentException("User is already member of this community!");
+            }
+
             user.Communities.Add(community);
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateAsync(CommunityFormViewModel model)
+        public async Task<Community> CreateAsync(CommunityFormViewModel model, string ownerId)
         {
             Community community = new Community()
             {
                 Name = model.Name,
                 Description = model.Description,
-                ImageUrl = model.ImageUrl
+                ImageUrl = model.ImageUrl,
+                OwnerId = Guid.Parse(ownerId)
             };
 
             await this.dbContext.Communities.AddAsync(community);
             await this.dbContext.SaveChangesAsync();
+
+            return community;
         }
 
         public async Task DeleteCommunityAsync(string communityId)
@@ -111,7 +121,7 @@
                 });
         }
 
-        public async Task<CommunityDetailsViewModel> GetForDetailsAsync(string id)
+        public async Task<CommunityFeedViewModel> GetForFeedAsync(string id)
         {
             Community? community = await this.dbContext.Communities
                 .Include(c => c.Posts)
@@ -124,7 +134,7 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            return new CommunityDetailsViewModel()
+            return new CommunityFeedViewModel()
             {
                 Id = community.Id.ToString(),
                 Name = community.Name,
@@ -153,6 +163,30 @@
                         Id = u.Id.ToString(),
                         DisplayName = u.DisplayName
                     }),
+                OwnerId = community.OwnerId.ToString()
+            };
+        }
+
+        public async Task<CommunityDetailsViewModel> GetForDetailsAsync(string id)
+        {
+            Community? community = await this.dbContext.Communities
+                .Include(c => c.Posts)
+                .ThenInclude(p => p.Comments)
+                .Include(c => c.Users)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return new CommunityDetailsViewModel()
+            {
+                Id = community.Id.ToString(),
+                Name = community.Name,
+                Description = community.Description,
+                ImageUrl = community.ImageUrl,
+                MembersCount = await this.GetMembersCountAsync(id),
                 OwnerId = community.OwnerId.ToString()
             };
         }
@@ -189,6 +223,28 @@
             return communitites;
         }
 
+        public async Task<bool> IsUserMemberAsync(string communityId, string userId)
+        {
+            Community? community = await this.dbContext.Communities
+                .Include(c => c.Users)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return community.Users.Any(u => u.Id.ToString() == userId);
+        }
+
+        public async Task<bool> IsUserOwnerAsync(string communityId, string userId)
+        {
+            Community community = await this.dbContext.Communities
+                .FindAsync(Guid.Parse(communityId));
+
+            return community!.OwnerId.ToString() == userId;
+        }
+
         public async Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr)
         {
             return await this.dbContext.Communities
@@ -214,6 +270,8 @@
             community.Name = updateModel.Name;
             community.Description = updateModel.Description;
             community.ImageUrl = updateModel.ImageUrl;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

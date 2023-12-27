@@ -17,6 +17,7 @@ namespace FrostArc.Web.ViewModels.Community
         [Required]
         [Url]
         [MaxLength(2048)]
+        [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = null!;
     }
 }
