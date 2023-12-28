@@ -8,5 +8,9 @@
         Task<Post> CreateAsync(PostFormViewModel model);
 
         Task<IEnumerable<PostAllViewModel>> GetAllForUserAsync(string userId);
+
+        Task<int> LikeAsync(string id);
+
+        Task<int> DislikeAsync(string id);
     }
 }

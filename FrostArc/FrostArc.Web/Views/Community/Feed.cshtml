@@ -4,6 +4,8 @@
     string userId = User.GetId()!;
 }
 
+@Html.AntiForgeryToken()
+
 <h2>@Model.Name</h2>
 <p>@Model.Description</p>
 
@@ -39,8 +41,8 @@
                 <p class="card-text">@post.Content</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <button class="btn btn-primary">👍 @post.Likes</button>
-                        <button class="btn btn-danger">👎 @post.Dislikes</button>
+                        <a data-post-id="@post.Id" class="btn btn-primary like-btn">👍 @post.Likes</a>
+                        <a data-post-id="@post.Id" class="btn btn-danger dislike-btn">👎 @post.Dislikes</a>
                     </div>
                     <small class="text-muted">Posted in @post.Community</small>
                 </div>
@@ -60,3 +62,5 @@
 }
 
 <a asp-controller="Post" asp-action="Create" asp-route-communityId="@Model.Id" class="btn btn-primary">Create Post</a>
+
+<script src="~/js/like-dislike.js"></script>

@@ -1,7 +1,5 @@
 ﻿namespace FrostArc.Web.Controllers
 {
-    using System.Security.Claims;
-
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
 
@@ -35,7 +33,7 @@
         {
             try
             {
-                bool isUserMember = await this.communityService.IsUserMemberAsync(id, User.GetId());
+                bool isUserMember = await this.communityService.IsUserMemberAsync(id, User.GetId()!);
 
                 if (isUserMember)
                 {

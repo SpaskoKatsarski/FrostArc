@@ -5,6 +5,7 @@ using FrostArc.Data;
 using FrostArc.Services.Contracts;
 using FrostArc.Services;
 using FrostArc.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<FrostArcDbContext>();
 
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+    });
 
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IDeveloperService, DeveloperService>();

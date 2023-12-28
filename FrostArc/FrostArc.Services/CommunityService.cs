@@ -94,12 +94,14 @@
         public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync()
         {
             return await this.dbContext.Communities
+                .OrderByDescending(c => c.Users.Count)
                 .Select(c => new CommunityAllViewModel
                 {
                     Id = c.Id.ToString(),
                     Name = c.Name,
                     ImageUrl = c.ImageUrl
-                }).ToListAsync();
+                })
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetCommunitiesForUserAsync(string userId)

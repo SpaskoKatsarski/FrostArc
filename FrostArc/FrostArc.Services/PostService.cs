@@ -4,6 +4,7 @@
     using FrostArc.Data.Models;
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Post;
+    using Microsoft.EntityFrameworkCore;
 
     public class PostService : IPostService
     {
@@ -34,6 +35,38 @@
         public Task<IEnumerable<PostAllViewModel>> GetAllForUserAsync(string userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> LikeAsync(string id)
+        {
+            Post? post = await this.dbContext.Posts
+                .FirstOrDefaultAsync(p => p.Id.ToString() == id);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            post.Likes++;
+            await this.dbContext.SaveChangesAsync();
+
+            return post.Likes;
+        }
+
+        public async Task<int> DislikeAsync(string id)
+        {
+            Post? post = await this.dbContext.Posts
+               .FirstOrDefaultAsync(p => p.Id.ToString() == id);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            post.Dislikes++;
+            await this.dbContext.SaveChangesAsync();
+
+            return post.Dislikes;
         }
     }
 }
