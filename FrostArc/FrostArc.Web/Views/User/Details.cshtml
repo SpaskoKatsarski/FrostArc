@@ -52,7 +52,7 @@
         @foreach (var community in Model.Communitites)
         {
             <div class="community">
-                <h3>@community.Name</h3>
+                <h3><a asp-controller="Community" asp-action="Details" asp-route-id="@community.Id">@community.Name</a></h3>
                 <img src="@community.ImageUrl" alt="@community.Name" style="width:100px;height:100px;" />
             </div>
         }

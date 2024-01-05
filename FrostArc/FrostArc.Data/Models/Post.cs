@@ -9,6 +9,7 @@
         {
             this.Id = Guid.NewGuid();
             this.Comments = new HashSet<Comment>();
+            this.PostReactions = new HashSet<PostReaction>();
         }
 
         [Key]
@@ -41,13 +42,15 @@
         [Required]
         public Community Community { get; set; } = null!;
 
-        public ICollection<Comment> Comments { get; set; }
-
         [Required]
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
 
         [Required]
         public ApplicationUser User { get; set; } = null!;
+
+        public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<PostReaction> PostReactions { get; set; } = null!;
     }
 }

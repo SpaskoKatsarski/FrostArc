@@ -9,8 +9,8 @@
 
         Task<IEnumerable<PostAllViewModel>> GetAllForUserAsync(string userId);
 
-        Task<int> LikeAsync(string id);
+        Task<int> LikeAsync(string id, string userId);
 
-        Task<int> DislikeAsync(string id);
+        Task<int> DislikeAsync(string id, string userId);
     }
 }

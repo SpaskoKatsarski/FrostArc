@@ -37,7 +37,7 @@
             throw new NotImplementedException();
         }
 
-        public async Task<int> LikeAsync(string id)
+        public async Task<int> LikeAsync(string id, string userId)
         {
             Post? post = await this.dbContext.Posts
                 .FirstOrDefaultAsync(p => p.Id.ToString() == id);
@@ -47,13 +47,20 @@
                 throw new ArgumentException("Post with the provided ID does not exist!");
             }
 
+            post.PostReactions.Add(new PostReaction()
+            {
+                UserId = Guid.Parse(userId),
+                PostId = Guid.Parse(id),
+                Like = true
+            });
+
             post.Likes++;
             await this.dbContext.SaveChangesAsync();
 
             return post.Likes;
         }
 
-        public async Task<int> DislikeAsync(string id)
+        public async Task<int> DislikeAsync(string id, string userId)
         {
             Post? post = await this.dbContext.Posts
                .FirstOrDefaultAsync(p => p.Id.ToString() == id);
@@ -62,6 +69,13 @@
             {
                 throw new ArgumentException("Post with the provided ID does not exist!");
             }
+
+            post.PostReactions.Add(new PostReaction()
+            {
+                UserId = Guid.Parse(userId),
+                PostId = Guid.Parse(id),
+                Like = true
+            });
 
             post.Dislikes++;
             await this.dbContext.SaveChangesAsync();

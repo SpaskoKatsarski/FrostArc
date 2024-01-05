@@ -13,6 +13,7 @@
             this.Comments = new HashSet<Comment>();
             this.Communities = new HashSet<Community>();
             this.Posts = new HashSet<Post>();
+            this.PostReactions = new HashSet<PostReaction>();
         }
 
         [Required]
@@ -31,5 +32,7 @@
         public ICollection<Community> OwnedCommunities { get; set; }
 
         public ICollection<Post> Posts { get; set; }
+
+        public ICollection<PostReaction> PostReactions { get; set; } = null!;
     }
 }

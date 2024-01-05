@@ -29,6 +29,8 @@
 
         public DbSet<GamePlatform> GamesPlatforms { get; set; }
 
+        public DbSet<PostReaction> PostsReactions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(GameEntityTypeConfiguration).Assembly);

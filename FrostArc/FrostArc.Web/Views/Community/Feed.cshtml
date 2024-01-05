@@ -41,8 +41,8 @@
                 <p class="card-text">@post.Content</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <a data-post-id="@post.Id" class="btn btn-primary like-btn">👍 @post.Likes</a>
-                        <a data-post-id="@post.Id" class="btn btn-danger dislike-btn">👎 @post.Dislikes</a>
+                        <a data-post-id="@post.Id" data-user-id="@userId" class="btn btn-primary like-btn">👍 @post.Likes</a>
+                        <a data-post-id="@post.Id" data-user-id="@userId" class="btn btn-danger dislike-btn">👎 @post.Dislikes</a>
                     </div>
                     <small class="text-muted">Posted in @post.Community</small>
                 </div>

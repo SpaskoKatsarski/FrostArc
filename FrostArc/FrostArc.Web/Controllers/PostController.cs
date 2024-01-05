@@ -43,11 +43,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Like(string id)
+        public async Task<IActionResult> Like(string id, string userId)
         {
             try
             {
-                int updatedLikes = await this.postService.LikeAsync(id);
+                int updatedLikes = await this.postService.LikeAsync(id, userId);
 
                 return Json(new { likes = updatedLikes });
             }
@@ -62,11 +62,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Dislike(string id)
+        public async Task<IActionResult> Dislike(string id, string userId)
         {
             try
             {
-                int updatedDislikes = await this.postService.DislikeAsync(id);
+                int updatedDislikes = await this.postService.DislikeAsync(id, userId);
 
                 return Json(new { dislikes = updatedDislikes });
             }
