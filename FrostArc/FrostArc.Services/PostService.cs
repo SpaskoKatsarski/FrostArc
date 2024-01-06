@@ -1,10 +1,11 @@
 ﻿namespace FrostArc.Services
 {
+    using Microsoft.EntityFrameworkCore;
+
     using FrostArc.Data;
     using FrostArc.Data.Models;
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Post;
-    using Microsoft.EntityFrameworkCore;
 
     public class PostService : IPostService
     {
@@ -74,7 +75,7 @@
             {
                 UserId = Guid.Parse(userId),
                 PostId = Guid.Parse(id),
-                Like = true
+                Dislike = true
             });
 
             post.Dislikes++;
@@ -83,7 +84,7 @@
             return post.Dislikes;
         }
 
-        public async Task<bool> HasUserLikedAsync(string id, string userId)
+        public async Task<bool> HasUserInteractedAsync(string id, string userId)
         {
             return await this.dbContext.PostsReactions
                 .AnyAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
@@ -102,6 +103,35 @@
             await this.dbContext.SaveChangesAsync();
 
             return post.Likes;
+        }
+
+        public async Task<Tuple<int, int>> ChangeDislikeToLikeAsync(string id, string userId)
+        {
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            Post post = await this.dbContext.Posts
+                .FirstAsync(p => p.Id.ToString() == id);
+
+            pr.Dislike = false;
+            pr.Like = true;
+
+            post.Likes++;
+            post.Dislikes--;
+
+            await this.dbContext.SaveChangesAsync();
+
+            Tuple<int, int> tuple = new Tuple<int, int>(post.Likes, post.Dislikes);
+
+            return tuple;
+        }
+
+        public async Task<bool> HasLikedAsync(string id, string userId)
+        {
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            return pr.Like;
         }
     }
 }

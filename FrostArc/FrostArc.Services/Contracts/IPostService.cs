@@ -13,8 +13,12 @@
 
         Task<int> DislikeAsync(string id, string userId);
 
-        Task<bool> HasUserLikedAsync(string id, string userId);
+        Task<bool> HasUserInteractedAsync(string id, string userId);
 
         Task<int> UnlikeAsync(string id, string userId);
+
+        Task<Tuple<int, int>> ChangeDislikeToLikeAsync(string id, string userId);
+
+        Task<bool> HasLikedAsync(string id, string userId);
     }
 }

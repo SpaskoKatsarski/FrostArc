@@ -48,11 +48,19 @@
             try
             {
                 int updatedLikes;
-                bool hasUserLiked = await this.postService.HasUserLikedAsync(id, userId);
 
-                if (hasUserLiked)
+                if (await this.postService.HasUserInteractedAsync(id, userId))
                 {
-                    updatedLikes = await this.postService.UnlikeAsync(id, userId);
+                    if (await this.postService.HasLikedAsync(id, userId))
+                    {
+                        updatedLikes = await this.postService.UnlikeAsync(id, userId);
+                    }
+                    else
+                    {
+                        Tuple<int, int> tuple = await this.postService.ChangeDislikeToLikeAsync(id, userId);
+
+                        return Json(new { likes = tuple.Item1, dislikes = tuple.Item2 });
+                    }
                 }
                 else
                 {
