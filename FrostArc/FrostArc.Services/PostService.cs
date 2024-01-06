@@ -82,5 +82,26 @@
 
             return post.Dislikes;
         }
+
+        public async Task<bool> HasUserLikedAsync(string id, string userId)
+        {
+            return await this.dbContext.PostsReactions
+                .AnyAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+        }
+
+        public async Task<int> UnlikeAsync(string id, string userId)
+        {
+            Post post = await this.dbContext.Posts
+                .FirstAsync(p => p.Id.ToString() == id);
+            
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            this.dbContext.PostsReactions.Remove(pr);
+            post.Likes--;
+            await this.dbContext.SaveChangesAsync();
+
+            return post.Likes;
+        }
     }
 }

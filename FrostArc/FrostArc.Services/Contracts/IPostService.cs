@@ -12,5 +12,9 @@
         Task<int> LikeAsync(string id, string userId);
 
         Task<int> DislikeAsync(string id, string userId);
+
+        Task<bool> HasUserLikedAsync(string id, string userId);
+
+        Task<int> UnlikeAsync(string id, string userId);
     }
 }

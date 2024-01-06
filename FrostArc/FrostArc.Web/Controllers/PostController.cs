@@ -47,7 +47,17 @@
         {
             try
             {
-                int updatedLikes = await this.postService.LikeAsync(id, userId);
+                int updatedLikes;
+                bool hasUserLiked = await this.postService.HasUserLikedAsync(id, userId);
+
+                if (hasUserLiked)
+                {
+                    updatedLikes = await this.postService.UnlikeAsync(id, userId);
+                }
+                else
+                {
+                    updatedLikes = await this.postService.LikeAsync(id, userId);
+                }
 
                 return Json(new { likes = updatedLikes });
             }
