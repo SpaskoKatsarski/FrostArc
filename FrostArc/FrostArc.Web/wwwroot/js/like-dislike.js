@@ -4,8 +4,9 @@
     $('.like-btn').click(function (e) {
         e.preventDefault();
         var postId = $(this).data('post-id');
-        var userId = $(this).data('user-id')
-        var button = $(this);
+        var userId = $(this).data('user-id');
+        var likeButton = $(this);
+        var dislikeButton = document.querySelector('dislike-btn');
         $.ajax({
             url: '/Post/Like',
             type: 'POST',
@@ -15,7 +16,8 @@
                 userId: userId
             },
             success: function (response) {
-                button.text('👍 ' + response.likes);
+                likeButton.text('👍 ' + response.likes);
+                dislikeButton.text('👎 ' + response.dislikes);
             }
         });
     });
@@ -23,8 +25,9 @@
     $('.dislike-btn').click(function (e) {
         e.preventDefault();
         var postId = $(this).data('post-id');
-        var userId = $(this).data('user-id')
-        var button = $(this);
+        var userId = $(this).data('user-id');
+        var dislikeButton = $(this);
+        var likeButton = document.querySelector('like-btn')
         $.ajax({
             url: '/Post/Dislike',
             type: 'POST',
@@ -34,7 +37,8 @@
                 userId: userId
             },
             success: function (response) {
-                button.text('👎 ' + response.dislikes);
+                dislikeButton.text('👎 ' + response.dislikes);
+                likeButton.text('👍 ' + response.likes);
             }
         });
     });
