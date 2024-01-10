@@ -25,6 +25,8 @@
             return View(platforms);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             PlatformDetailsViewModel platform = await this.platformService.GetDetailsAsync(id);

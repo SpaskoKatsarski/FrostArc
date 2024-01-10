@@ -30,6 +30,7 @@
         public async Task<PlatformDetailsViewModel> GetDetailsAsync(int platformId)
         {
             Platform? platform = await this.dbContext.Platforms
+                .Include(p => p.GamePlatforms)
                 .FirstOrDefaultAsync(p => p.Id == platformId);
 
             if (platform == null)
@@ -42,13 +43,13 @@
                 Id = platform.Id,
                 Name = platform.Name,
                 Description = platform.Description,
-                Games = platform.Games
-                    .Select(g => new GameListViewModel()
-                    {
-                        Id = g.Id.ToString(),
-                        Title = g.Title,
-                        ImageUrl = g.ImageUrl
-                    })
+                //Games = platform.GamePlatforms
+                //    .Select(g => new GameListViewModel()
+                //    {
+                //        Id = g.Id.ToString(),
+                //        Title = g.Title,
+                //        ImageUrl = g.ImageUrl
+                //    })
             };
         }
     }

@@ -6,7 +6,6 @@
     {
         public Platform()
         {
-            this.Games = new HashSet<Game>();
             this.GamePlatforms = new HashSet<GamePlatform>();
         }
 
@@ -22,8 +21,6 @@
         public string Description { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
-
-        public ICollection<Game> Games { get; set; }
 
         public ICollection<GamePlatform> GamePlatforms { get; set; }
     }
