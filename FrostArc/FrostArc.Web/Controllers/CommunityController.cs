@@ -72,10 +72,11 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Join(string id, string userId)
+        public async Task<IActionResult> Join(string id)
         {
             try
             {
+                string userId = User.GetId()!;
                 await this.communityService.AddUserToCommunityAsync(id, userId);
             }
             catch (ArgumentException ae)

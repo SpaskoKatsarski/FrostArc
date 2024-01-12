@@ -31,6 +31,7 @@
         {
             Platform? platform = await this.dbContext.Platforms
                 .Include(p => p.GamePlatforms)
+                .ThenInclude(gp => gp.Game)
                 .FirstOrDefaultAsync(p => p.Id == platformId);
 
             if (platform == null)
@@ -43,13 +44,13 @@
                 Id = platform.Id,
                 Name = platform.Name,
                 Description = platform.Description,
-                //Games = platform.GamePlatforms
-                //    .Select(g => new GameListViewModel()
-                //    {
-                //        Id = g.Id.ToString(),
-                //        Title = g.Title,
-                //        ImageUrl = g.ImageUrl
-                //    })
+                Games = platform.GamePlatforms
+                    .Select(gp => new GameListViewModel()
+                    {
+                        Id = gp.Game.Id.ToString(),
+                        Title = gp.Game.Title,
+                        ImageUrl = gp.Game.ImageUrl
+                    })
             };
         }
     }
