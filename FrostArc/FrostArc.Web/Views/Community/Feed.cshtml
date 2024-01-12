@@ -54,7 +54,11 @@
                         <strong>@comment.UserId:</strong> @comment.Content
                     </div>
                 }
-                <a class="btn btn-outline-secondary">Write a Comment</a>
+                <a id="comment-btn" class="btn btn-outline-secondary">Write a Comment</a>
+                <div id="comment-section" class="mt-3" style="display:none">
+                    <textarea id="comment-field" class="active" rows="5" cols="70" placeholder="What are your thoughts?"></textarea>
+                    <button type="submit" class="btn btn-primary" data-post-id="@post.Id">Submit Comment</button>
+                </div>
             </div>
         </div>
     }
@@ -63,3 +67,4 @@
 <a asp-controller="Post" asp-action="Create" asp-route-communityId="@Model.Id" class="btn btn-primary">Create Post</a>
 
 <script src="~/js/like-dislike.js"></script>
+<script src="~/js/comment.js"></script>
