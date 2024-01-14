@@ -164,7 +164,7 @@
                     {
                         Id = u.Id.ToString(),
                         DisplayName = u.DisplayName
-                    }),
+                    }).ToList(),
                 OwnerId = community.OwnerId.ToString()
             };
         }
@@ -273,6 +273,52 @@
             community.Description = updateModel.Description;
             community.ImageUrl = updateModel.ImageUrl;
 
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId)
+        {
+            Community? community = await this.dbContext.Communities
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return new CommunityUsersViewModel()
+            {
+                Id = community.Id.ToString(),
+                Name = community.Name,
+                Users = community.Users
+                        .Select(u => new UserAllViewModel()
+                        {
+                            Id = u.Id.ToString(),
+                            DisplayName = u.DisplayName,
+                            ProfilePictureUrl = u.ProfilePicture
+                        }).ToList()
+            };
+        }
+
+        public async Task RemoveUserFromCommunityAsync(string communityId, string userId)
+        {
+            ApplicationUser? user = await this.dbContext.Users
+                .FindAsync(Guid.Parse(userId));
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with the provided ID does not exist!");
+            }
+
+            Community? community = await this.dbContext.Communities
+                .FindAsync(Guid.Parse(communityId));
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            community.Users.Remove(user);
             await this.dbContext.SaveChangesAsync();
         }
     }

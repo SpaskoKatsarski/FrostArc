@@ -2,6 +2,7 @@
 {
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.Community;
+    using FrostArc.Web.ViewModels.User;
 
     public interface ICommunityService
     {
@@ -16,6 +17,8 @@
         Task<Community> FindAsync(string communityId);
 
         Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr);
+
+        Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId);
 
         Task<int> GetMembersCountAsync(string communityId);
 
@@ -32,5 +35,6 @@
         Task<bool> IsUserOwnerAsync(string communityId, string userId);
 
         Task<bool> IsUserMemberAsync(string communityId, string userId);
+        Task RemoveUserFromCommunityAsync(string communityId, string userId);
     }
 }

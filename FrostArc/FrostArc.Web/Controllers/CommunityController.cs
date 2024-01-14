@@ -7,6 +7,7 @@
     using FrostArc.Web.ViewModels.Community;
     using FrostArc.Data.Models;
     using FrostArc.Web.Infrastructire.Extensions;
+    using FrostArc.Web.ViewModels.User;
 
     [Authorize]
     public class CommunityController : Controller
@@ -107,6 +108,46 @@
             {
                 return BadRequest(ae.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Users(string communityId)
+        {
+            if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                CommunityUsersViewModel communityUsers = await this.communityService.GetCommunityUsersAsync(communityId);
+
+                return View(communityUsers);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveUser(string communityId, string userId)
+        {
+            if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                await this.communityService.RemoveUserFromCommunityAsync(communityId, userId);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+
+            return View("Users", new { communityId });
         }
     }
 }

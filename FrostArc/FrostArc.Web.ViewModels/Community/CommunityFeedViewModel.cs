@@ -19,6 +19,6 @@
 
         public IEnumerable<PostAllViewModel> Posts { get; set; } = null!;
 
-        public IEnumerable<UserAllViewModel> Users { get; set; } = null!;
+        public List<UserAllViewModel> Users { get; set; } = null!;
     }
 }

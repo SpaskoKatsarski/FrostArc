@@ -1,7 +1,10 @@
-﻿@model CommunityFeedViewModel
+﻿@using FrostArc.Services.Contracts;
+@model CommunityFeedViewModel;
+@inject ICommunityService communityService;
 
 @{
     string userId = User.GetId()!;
+    bool isUserOwner = await this.communityService.IsUserOwnerAsync(Model.Id, userId);
 }
 
 @Html.AntiForgeryToken()
@@ -17,9 +20,26 @@
 {
     <h3>Users</h3>
     <ul>
-        @foreach (var user in Model.Users)
+        @if (Model.Users.Count > 3)
         {
-            <li>@user.DisplayName</li>
+            @for (int i = 0; i < 3; i++)
+            {
+                UserAllViewModel currUser = Model.Users[i];
+                <li>@currUser.DisplayName</li>
+            }
+            <li>...</li>
+        }
+        else
+        {
+            @foreach (var user in Model.Users)
+            {
+                <li>@user.DisplayName</li>
+            }
+        }
+
+        @if (isUserOwner)
+        {
+            <a asp-controller="Community" asp-action="Users" asp-route-communityId="@Model.Id">Members</a>
         }
     </ul>
 }
