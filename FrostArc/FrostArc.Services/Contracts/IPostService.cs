@@ -20,5 +20,7 @@
         Task<Tuple<int, int>> ChangeDislikeToLikeAsync(string id, string userId);
 
         Task<bool> HasLikedAsync(string id, string userId);
+
+        Task<Comment> AddCommentAsync(string postId, string userId, string comment);
     }
 }

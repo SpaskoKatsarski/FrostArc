@@ -133,5 +133,29 @@
 
             return pr.Like;
         }
+
+        public async Task<Comment> AddCommentAsync(string postId, string userId, string commentContent)
+        {
+            Post? post = await this.dbContext.Posts
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            Comment comment = new Comment()
+            { 
+                Content = commentContent,
+                PostId = Guid.Parse(postId),
+                UserId = Guid.Parse(userId)
+            };
+
+            post.Comments.Add(comment);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return comment;
+        }
     }
 }

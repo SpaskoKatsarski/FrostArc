@@ -50,14 +50,14 @@
                 <h6>Comments:</h6>
                 @foreach (var comment in post.Comments)
                 {
-                    <div class="border-bottom mb-2">
-                        <strong>@comment.UserId:</strong> @comment.Content
-                    </div>
+                    <ul id="comments-@post.Id.ToString()">
+                        <li><strong>@comment.UserId:</strong> @comment.Content</li>
+                    </ul>
                 }
-                <a id="comment-btn" class="btn btn-outline-secondary">Write a Comment</a>
+                <a class="comment-btn btn btn-outline-secondary">Write a Comment</a>
                 <div id="comment-section" class="mt-3" style="display:none">
                     <textarea id="comment-field" class="active" rows="5" cols="70" placeholder="What are your thoughts?"></textarea>
-                    <button type="submit" class="btn btn-primary" data-post-id="@post.Id">Submit Comment</button>
+                    <button type="submit" class="btn btn-primary submit-comment" data-post-id="@post.Id" data-user-id="@userId">Submit Comment</button>
                 </div>
             </div>
         </div>

@@ -1,41 +1,43 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    const commentBtn = document.getElementById('comment-btn')
-    const commentSection = document.getElementById('comment-section')
+    const commentBtns = document.getElementsByClassName('comment-btn');
 
-    commentBtn.addEventListener('click', function () {
-        if (commentSection.style.display === 'none') {
-            commentSection.style.display = 'block'
-        } else {
-            commentSection.style.display = 'none'
-        }
-    })
-})
+    Array.from(commentBtns).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var commentSection = this.nextElementSibling;
+            if (commentSection.style.display === 'none' || commentSection.style.display === '') {
+                commentSection.style.display = 'block';
+            } else {
+                commentSection.style.display = 'none';
+            }
+        });
+    });
+});
 
 $(document).ready(function () {
-    $('.comment-btn').click(function () {
-        var buttonId = this.id;
-        var lastHyphenIndex = buttonId.lastIndexOf('-');
-        var postId = buttonId.substring(lastHyphenIndex + 1);
-        $('#comment-section-' + postId).toggle();
-    });
-
     $('.submit-comment').click(function () {
         var postId = $(this).data('post-id');
-        var commentContent = $('#comment-field-' + postId).val();
+        var userId = $(this).data('user-id');
+        var commentContent = $(this).closest('.comment-section').find('.comment-field').val();
+
+        var token = $('input[name="__RequestVerificationToken"]').val();
+        var headers = { RequestVerificationToken: token };
 
         $.ajax({
             url: '/Post/Comment',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ postId: postId, content: commentContent }),
+            data: JSON.stringify({ postId: postId, userId: userId, content: commentContent }),
+            headers: headers,
             success: function (response) {
-                // Success message
                 alert("Comment posted successfully!");
-                $('#comment-field-' + postId).val('');
-                $('#comment-section-' + postId).hide();
+                var newCommentHtml = '<li><strong>' + response.newCommentUserId + ':</strong> ' + response.newComment + '</li>';
+                $('#comments-' + postId).append(newCommentHtml);
+                
+                $('.comment-field').val('');
+                $('.comment-section').hide();
             },
-            error: function (error) {
-                alert("Error occured while posting the comment.");
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error occurred: " + textStatus + ", " + errorThrown);
             }
         });
     });
