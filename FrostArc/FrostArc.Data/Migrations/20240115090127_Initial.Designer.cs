@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FrostArc.Data.Migrations
 {
     [DbContext(typeof(FrostArcDbContext))]
-    [Migration("20231221095251_ChangingImagesOfGames")]
-    partial class ChangingImagesOfGames
+    [Migration("20240115090127_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,6 +116,26 @@ namespace FrostArc.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a5ffe339-e503-4c1c-a19c-7922387d569b",
+                            DisplayName = "SyncK",
+                            Email = "spasko@abv.bg",
+                            EmailConfirmed = false,
+                            LockoutEnabled = true,
+                            NormalizedEmail = "SPASKO@ABV.BG",
+                            NormalizedUserName = "SPASKO@ABV.BG",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPBMWVdBHlzeb6Eqz6k/lgG4jOcllttGs50qL1lv67H3/hVg6EX4VGVNuQ2gLRxBdw==",
+                            PhoneNumberConfirmed = false,
+                            ProfilePicture = "https://cdn-icons-png.flaticon.com/512/1053/1053244.png",
+                            SecurityStamp = "1BC726483DA146C7AB96961EBD8FA88B",
+                            TwoFactorEnabled = false,
+                            UserName = "spasko@abv.bg"
+                        });
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Comment", b =>
@@ -126,8 +146,8 @@ namespace FrostArc.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(1500)
+                        .HasColumnType("nvarchar(1500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -155,8 +175,8 @@ namespace FrostArc.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -171,98 +191,114 @@ namespace FrostArc.Data.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Communities");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("13e5ea0f-09d1-46c4-9428-21b11d4cf8af"),
+                            Id = new Guid("45d1292c-d36b-41b4-839a-21a3bb172524"),
                             Description = "A community for Diablo 3 enthusiasts.",
                             ImageUrl = "https://upload.wikimedia.org/wikipedia/en/8/80/Diablo_III_cover.png",
                             IsDeleted = false,
-                            Name = "Diablo 3"
+                            Name = "Diablo 3",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("93243176-d0e3-4b56-b505-668150b46aa4"),
+                            Id = new Guid("d449c405-da3a-4219-bf38-eefcaab0e99d"),
                             Description = "A community for fans of The Witcher series.",
                             ImageUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmHlktOHar3lVl6rY.png",
                             IsDeleted = false,
-                            Name = "The Witcher Series"
+                            Name = "The Witcher Series",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("cbd4f4e4-94b7-44cb-9ff8-cf1416e3a620"),
+                            Id = new Guid("778f551e-b624-400d-b169-fa1873f1c1b6"),
                             Description = "A gathering spot for Call of Duty players.",
                             ImageUrl = "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/mw2/home/reveal/new-era/new_era-mw2.jpg",
                             IsDeleted = false,
-                            Name = "Call of Duty"
+                            Name = "Call of Duty",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("6cccfbd9-3f25-4062-907c-4a3bb9f64c20"),
+                            Id = new Guid("c139e4de-cd2e-4a94-9f12-10ef56811057"),
                             Description = "Community for League of Legends players and enthusiasts.",
                             ImageUrl = "https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-872a966297484acd0efe49f34edd5aed",
                             IsDeleted = false,
-                            Name = "League of Legends"
+                            Name = "League of Legends",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("b11a01fa-ef9d-446a-9326-696a60946c4e"),
+                            Id = new Guid("7d869827-85a3-4dba-838e-18eed8274d88"),
                             Description = "For fans of the Elder Scrolls series.",
                             ImageUrl = "https://esosslfiles-a.akamaihd.net/cms/2021/11/f5059a45d236626bd8ba7433c488bbe7.jpg",
                             IsDeleted = false,
-                            Name = "Elder Scrolls"
+                            Name = "Elder Scrolls",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("dab57e15-0a14-4b33-aae7-c0054fc78c14"),
+                            Id = new Guid("069871d2-c0dd-497f-bd4c-ad9f83015404"),
                             Description = "A community dedicated to the challenging world of Dark Souls.",
                             ImageUrl = "https://media.wired.co.uk/photos/606db938d051e15de128ccb1/4:3/w_2876,h_2157,c_limit/crop.jpg",
                             IsDeleted = false,
-                            Name = "Dark Souls"
+                            Name = "Dark Souls",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("21df3ccd-2478-4f0a-852f-4c5b2a402cb2"),
+                            Id = new Guid("20268341-d842-483b-8213-a3ce0c1a4973"),
                             Description = "Fans of the Assassin's Creed series unite here.",
                             ImageUrl = "https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/449BBgnc3Q1ha2IN9rh3bR/e1077125021162ce2d59820739c316e7/ACEC_Keyart_00_00_00_mobile.jpg",
                             IsDeleted = false,
-                            Name = "Assassin's Creed"
+                            Name = "Assassin's Creed",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("05791e34-7402-4719-986d-fa352fcaa7c4"),
+                            Id = new Guid("693e6122-36d4-4dbe-abea-30eacc0dac21"),
                             Description = "A hub for Dota 2 players of all levels.",
                             ImageUrl = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota2_social.jpg",
                             IsDeleted = false,
-                            Name = "Dota 2"
+                            Name = "Dota 2",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("aef6a689-2e56-4a01-b98a-11ff45c0de2b"),
+                            Id = new Guid("eabdd539-d7e9-486d-add7-d60654785f1a"),
                             Description = "A community for lovers of the Final Fantasy series.",
                             ImageUrl = "https://fyre.cdn.sewest.net/ffvii-hub/6471442498774a5fd66555de/pub106_cloud_zack_sephiroth-3-1--ga4rX0dsG.jpg?quality=85&width=3840",
                             IsDeleted = false,
-                            Name = "Final Fantasy"
+                            Name = "Final Fantasy",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("012e6d6a-6b7d-48e7-8fed-0ea565bf8198"),
+                            Id = new Guid("be951542-ac2d-4b9b-a5dd-532687b9e020"),
                             Description = "A place for Overwatch players and fans.",
                             ImageUrl = "https://media.wired.com/photos/642c752dc18cf0c5f132190d/master/pass/Overwatch-2-Lifeweaver-Gear.jpg",
                             IsDeleted = false,
-                            Name = "Overwatch"
+                            Name = "Overwatch",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         },
                         new
                         {
-                            Id = new Guid("8844e398-c764-40bd-8da8-d735be84e11b"),
+                            Id = new Guid("66b15ce5-93c6-400f-a669-8bf55cca9274"),
                             Description = "Community for enthusiasts of the Grand Theft Auto series.",
                             ImageUrl = "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png",
                             IsDeleted = false,
-                            Name = "Grand Theft Auto"
+                            Name = "Grand Theft Auto",
+                            OwnerId = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a")
                         });
                 });
 
@@ -274,8 +310,8 @@ namespace FrostArc.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -346,7 +382,7 @@ namespace FrostArc.Data.Migrations
                         {
                             Id = new Guid("7b8c9d0e-1f2a-3b4c-5d6e-7f8a9b0c1d2e"),
                             Description = "American video game developer, publisher and digital distribution company, known for Dota 2.",
-                            ImageUrl = "https://static.wikia.nocookie.net/half-life/images/6/68/2560px-Valve_logo.svg.png/revision/latest?cb=20200325103915&path-prefix=en",
+                            ImageUrl = "https://pbs.twimg.com/profile_images/1196563043150204928/X6pfa2YZ_400x400.jpg",
                             IsDeleted = false,
                             Name = "Valve Corporation"
                         },
@@ -384,8 +420,8 @@ namespace FrostArc.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<Guid>("DeveloperId")
                         .HasColumnType("uniqueidentifier");
@@ -395,14 +431,11 @@ namespace FrostArc.Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(600)
-                        .HasColumnType("nvarchar(600)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("PlatformId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
@@ -417,8 +450,6 @@ namespace FrostArc.Data.Migrations
                     b.HasIndex("DeveloperId");
 
                     b.HasIndex("GenreId");
-
-                    b.HasIndex("PlatformId");
 
                     b.ToTable("Games");
 
@@ -935,21 +966,26 @@ namespace FrostArc.Data.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("Dislikes")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Likes")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -961,6 +997,27 @@ namespace FrostArc.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("FrostArc.Data.Models.PostReaction", b =>
+                {
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Dislike")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Like")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PostId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostsReactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -1132,6 +1189,17 @@ namespace FrostArc.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FrostArc.Data.Models.Community", b =>
+                {
+                    b.HasOne("FrostArc.Data.Models.ApplicationUser", "Owner")
+                        .WithMany("OwnedCommunities")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("FrostArc.Data.Models.Game", b =>
                 {
                     b.HasOne("FrostArc.Data.Models.Developer", "Developer")
@@ -1145,10 +1213,6 @@ namespace FrostArc.Data.Migrations
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("FrostArc.Data.Models.Platform", null)
-                        .WithMany("Games")
-                        .HasForeignKey("PlatformId");
 
                     b.Navigation("Developer");
 
@@ -1189,6 +1253,25 @@ namespace FrostArc.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Community");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FrostArc.Data.Models.PostReaction", b =>
+                {
+                    b.HasOne("FrostArc.Data.Models.Post", "Post")
+                        .WithMany("PostReactions")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FrostArc.Data.Models.ApplicationUser", "User")
+                        .WithMany("PostReactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -1248,6 +1331,10 @@ namespace FrostArc.Data.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("OwnedCommunities");
+
+                    b.Navigation("PostReactions");
+
                     b.Navigation("Posts");
                 });
 
@@ -1274,13 +1361,13 @@ namespace FrostArc.Data.Migrations
             modelBuilder.Entity("FrostArc.Data.Models.Platform", b =>
                 {
                     b.Navigation("GamePlatforms");
-
-                    b.Navigation("Games");
                 });
 
             modelBuilder.Entity("FrostArc.Data.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("PostReactions");
                 });
 #pragma warning restore 612, 618
         }

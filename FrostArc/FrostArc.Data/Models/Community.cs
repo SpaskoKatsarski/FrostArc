@@ -3,6 +3,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using static Common.DataValidationConstants.Community;
+
     public class Community
     {
         public Community()
@@ -16,15 +18,15 @@
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(25)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
         [Required]
-        [MaxLength(2048)]
+        [MaxLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
         [Required]

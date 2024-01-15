@@ -4,12 +4,11 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserService userService
 
-@{
-    string? userId = UserManager.GetUserId(User);
-}
 <ul class="navbar-nav me-5">
     @if (SignInManager.IsSignedIn(User))
     {
+        string userId = UserManager.GetUserId(User)!;
+
         <li class="nav-item dropdown ms-5 me-5">
             <a id="user-dropdown" class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor: pointer;">
                 @await userService.GetDisplayNameAsync(userId!)

@@ -3,6 +3,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using static Common.DataValidationConstants.Post;
+
     public class Post
     {
         public Post()
@@ -16,21 +18,22 @@
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;
 
         [Required]
         [MaxLength(1000)]
         public string Content { get; set; } = null!;
 
+        [MaxLength(ImageUrlMaxLength)]
         public string? ImageUrl { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
+        [Range(LikesMinValue, LikesMaxValue)]
         public int Likes { get; set; }
 
         [Required]
-        [Range(0, double.MaxValue)]
+        [Range(DislikesMinValue, DislikesMaxValue)]
         public int Dislikes { get; set; }
 
         public bool IsDeleted { get; set; }

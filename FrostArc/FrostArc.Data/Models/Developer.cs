@@ -2,6 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using static Common.DataValidationConstants.Developer;
+
     public class Developer
     {
         public Developer()
@@ -15,11 +17,11 @@
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
         [Required]

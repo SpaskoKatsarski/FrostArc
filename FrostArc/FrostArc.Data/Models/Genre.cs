@@ -2,6 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using static Common.DataValidationConstants.Genre;
+
     public class Genre
     {
         public Genre()
@@ -13,11 +15,11 @@
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
         public bool IsDeleted { get; set; }

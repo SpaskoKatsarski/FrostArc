@@ -5,6 +5,8 @@
 
     using Microsoft.AspNetCore.Identity;
 
+    using static Common.DataValidationConstants.ApplicationUser;
+
     public class ApplicationUser : IdentityUser<Guid>
     {
         public ApplicationUser()
@@ -17,21 +19,21 @@
         }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(DisplayNameMaxLength)]
         public string DisplayName { get; set; } = null!;
 
         [Required]
-        [MaxLength(2048)]
+        [MaxLength(ProfilePictureMaxLength)]
         public string ProfilePicture { get; set; } = null!;
 
-        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; } = null!;
 
-        public ICollection<Community> Communities { get; set; }
+        public ICollection<Community> Communities { get; set; } = null!;
 
         [InverseProperty(nameof(Community.Owner))]
-        public ICollection<Community> OwnedCommunities { get; set; }
+        public ICollection<Community> OwnedCommunities { get; set; } = null!;
 
-        public ICollection<Post> Posts { get; set; }
+        public ICollection<Post> Posts { get; set; } = null!;
 
         public ICollection<PostReaction> PostReactions { get; set; } = null!;
     }

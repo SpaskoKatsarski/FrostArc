@@ -3,6 +3,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    using static Common.DataValidationConstants.Game;
+
     public class Game
     {
         public Game()
@@ -15,7 +17,7 @@
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;
 
         [Required]
@@ -35,11 +37,11 @@
         public Genre Genre { get; set; } = null!;
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; } = null!;
 
         [Required]
-        [MaxLength(600)]
+        [MaxLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
