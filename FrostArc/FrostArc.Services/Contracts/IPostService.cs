@@ -22,5 +22,7 @@
         Task<bool> HasLikedAsync(string id, string userId);
 
         Task<Comment> AddCommentAsync(string postId, string userId, string comment);
+
+        Task<PostFormViewModel> EditPostAsync();
     }
 }

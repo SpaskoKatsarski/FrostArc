@@ -17,6 +17,8 @@
 
         public string OwnerId { get; set; } = null!;
 
+        public string OwnerName { get; set; } = null!;
+
         public IEnumerable<PostAllViewModel> Posts { get; set; } = null!;
 
         public List<UserAllViewModel> Users { get; set; } = null!;

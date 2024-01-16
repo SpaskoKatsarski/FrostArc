@@ -61,6 +61,8 @@
             await this.dbContext.Communities.AddAsync(community);
             await this.dbContext.SaveChangesAsync();
 
+            await this.AddUserToCommunityAsync(community.Id.ToString(), ownerId);
+
             return community;
         }
 
@@ -129,6 +131,7 @@
                 .Include(c => c.Posts)
                 .ThenInclude(p => p.Comments)
                 .Include(c => c.Users)
+                .Include(c => c.Owner)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (community == null)
@@ -165,7 +168,8 @@
                         Id = u.Id.ToString(),
                         DisplayName = u.DisplayName
                     }).ToList(),
-                OwnerId = community.OwnerId.ToString()
+                OwnerId = community.OwnerId.ToString(),
+                OwnerName = community.Owner.DisplayName
             };
         }
 
@@ -175,6 +179,7 @@
                 .Include(c => c.Posts)
                 .ThenInclude(p => p.Comments)
                 .Include(c => c.Users)
+                .Include(c => c.Owner)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (community == null)
@@ -189,7 +194,8 @@
                 Description = community.Description,
                 ImageUrl = community.ImageUrl,
                 MembersCount = await this.GetMembersCountAsync(id),
-                OwnerId = community.OwnerId.ToString()
+                OwnerId = community.OwnerId.ToString(),
+                OwnerName = community.Owner.DisplayName
             };
         }
 

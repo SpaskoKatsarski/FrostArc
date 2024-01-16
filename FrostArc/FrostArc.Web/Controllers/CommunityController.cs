@@ -7,7 +7,6 @@
     using FrostArc.Web.ViewModels.Community;
     using FrostArc.Data.Models;
     using FrostArc.Web.Infrastructire.Extensions;
-    using FrostArc.Web.ViewModels.User;
 
     [Authorize]
     public class CommunityController : Controller
@@ -35,8 +34,9 @@
             try
             {
                 bool isUserMember = await this.communityService.IsUserMemberAsync(id, User.GetId()!);
+                bool isUserOwner = await this.communityService.IsUserOwnerAsync(id, User.GetId()!);
 
-                if (isUserMember)
+                if (isUserMember || isUserOwner)
                 {
                     return RedirectToAction("Feed", new { id });
                 }
@@ -94,15 +94,16 @@
             try
             {
                 bool isMember = await this.communityService.IsUserMemberAsync(id, User.GetId()!);
+                bool isOwner = await this.communityService.IsUserOwnerAsync(id, User.GetId()!);
 
-                if (isMember)
+                if (!isMember && !isOwner)
                 {
-                    CommunityFeedViewModel model = await this.communityService.GetForFeedAsync(id);
-
-                    return View(model);
+                    return BadRequest("You should join this community in order to access its Feed.");
                 }
 
-                return BadRequest("You should join this community in order to access its Feed.");
+                CommunityFeedViewModel model = await this.communityService.GetForFeedAsync(id);
+
+                return View(model);
             }
             catch (ArgumentException ae)
             {

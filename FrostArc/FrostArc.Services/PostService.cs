@@ -157,5 +157,10 @@
 
             return comment;
         }
+
+        public Task<PostFormViewModel> EditPostAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,8 +1,5 @@
 ﻿namespace FrostArc.Web.ViewModels.Community
 {
-    using FrostArc.Web.ViewModels.Post;
-    using FrostArc.Web.ViewModels.User;
-
     public class CommunityDetailsViewModel
     {
         public string Id { get; set; } = null!;
@@ -16,5 +13,7 @@
         public int MembersCount { get; set; }
 
         public string OwnerId { get; set; } = null!;
+
+        public string OwnerName { get; set; } = null!;
     }
 }
