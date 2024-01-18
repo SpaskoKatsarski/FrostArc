@@ -48,6 +48,13 @@
         {
             try
             {
+                bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, User.GetId()!);
+
+                if (!isUserCreator)
+                {
+                    throw new InvalidOperationException("User is not the creator of the post!");
+                }
+
                 PostFormViewModel post = await this.postService.GetForEditAsync(postId);
 
                 return View(post);
@@ -55,6 +62,10 @@
             catch (ArgumentException ae)
             {
                 return BadRequest(ae.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                return Forbid(ioe.Message);
             }
         }
 

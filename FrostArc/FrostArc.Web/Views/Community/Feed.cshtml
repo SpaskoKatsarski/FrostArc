@@ -41,7 +41,7 @@
 
         @if (isUserOwner)
         {
-            <a asp-controller="Community" asp-action="Users" asp-route-communityId="@Model.Id">Members</a>
+            <a class="btn btn-primary" asp-controller="Community" asp-action="Users" asp-route-communityId="@Model.Id">Members</a>
         }
     </ul>
 }
@@ -68,11 +68,13 @@
                     </div>
                 </div>
             </div>
-            @* TODO: Add UserId to PostViewModel class and check if they are the same with the current -> Add Edit and Delete button
-            @if (post)
+            @if (post.UserId == User.GetId())
             {
-                
-            } *@
+                <div class="mb-3">
+                    <a class="btn btn-warning" asp-controller="Post" asp-action="Edit" asp-route-postId="@post.Id">Edit</a>
+                    <a class="btn btn-danger" asp-controller="Post" asp-action="Remove" asp-route-postId="@post.Id">Delete</a>
+                </div>
+            }
             <div class="card-footer">
                 <h6>Comments:</h6>
                 @foreach (var comment in post.Comments)

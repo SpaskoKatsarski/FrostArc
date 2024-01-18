@@ -16,6 +16,8 @@
 
         public int Dislikes { get; set; }
 
+        public string UserId { get; set; } = null!;
+
         public IEnumerable<CommentPostViewModel> Comments { get; set; } = null!;
 
         public string Community { get; set; } = null!;

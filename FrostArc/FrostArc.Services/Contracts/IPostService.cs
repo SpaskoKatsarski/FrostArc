@@ -26,5 +26,7 @@
         Task EditAsync(PostFormViewModel model);
 
         Task<PostFormViewModel> GetForEditAsync(string postId);
+
+        Task<bool> IsUserCreatorAsync(string postId, string userId);
     }
 }

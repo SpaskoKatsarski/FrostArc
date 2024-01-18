@@ -155,6 +155,7 @@
                         ImageUrl = p.ImageUrl,
                         Likes = p.Likes,
                         Dislikes = p.Dislikes,
+                        UserId = p.UserId.ToString(),
                         Comments = p.Comments
                             .Select(c => new CommentPostViewModel()
                             {

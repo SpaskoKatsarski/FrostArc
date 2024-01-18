@@ -41,7 +41,7 @@
         public async Task<int> LikeAsync(string id, string userId)
         {
             Post? post = await this.dbContext.Posts
-                .FirstOrDefaultAsync(p => p.Id.ToString() == id);
+                .FindAsync(Guid.Parse(id));
 
             if (post == null)
             {
@@ -63,8 +63,8 @@
 
         public async Task<int> DislikeAsync(string id, string userId)
         {
-            Post? post = await this.dbContext.Posts
-               .FirstOrDefaultAsync(p => p.Id.ToString() == id);
+            Post post = await this.dbContext.Posts
+                .FindAsync(Guid.Parse(id));
 
             if (post == null)
             {
@@ -93,8 +93,8 @@
         public async Task<int> UnlikeAsync(string id, string userId)
         {
             Post post = await this.dbContext.Posts
-                .FirstAsync(p => p.Id.ToString() == id);
-            
+                .FindAsync(Guid.Parse(id));
+
             PostReaction pr = await this.dbContext.PostsReactions
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
 
@@ -111,7 +111,7 @@
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
 
             Post post = await this.dbContext.Posts
-                .FirstAsync(p => p.Id.ToString() == id);
+                .FindAsync(Guid.Parse(id));
 
             pr.Dislike = false;
             pr.Like = true;
@@ -137,7 +137,7 @@
         public async Task<Comment> AddCommentAsync(string postId, string userId, string commentContent)
         {
             Post? post = await this.dbContext.Posts
-                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+                .FindAsync(Guid.Parse(postId));
 
             if (post == null)
             {
@@ -178,7 +178,7 @@
         public async Task<PostFormViewModel> GetForEditAsync(string postId)
         {
             Post? post = await this.dbContext.Posts
-                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+                .FindAsync(Guid.Parse(postId));
 
             if (post == null)
             {
@@ -193,6 +193,19 @@
                 UserId = post.UserId.ToString(),
                 CommunityId = post.CommunityId.ToString()
             };
+        }
+
+        public async Task<bool> IsUserCreatorAsync(string postId, string userId)
+        {
+            Post? post = await this.dbContext.Posts
+                .FindAsync(Guid.Parse(postId));
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            return post.UserId.ToString() == userId;
         }
     }
 }
