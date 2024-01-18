@@ -23,6 +23,8 @@
 
         Task<Comment> AddCommentAsync(string postId, string userId, string comment);
 
-        Task<PostFormViewModel> EditPostAsync();
+        Task EditAsync(PostFormViewModel model);
+
+        Task<PostFormViewModel> GetForEditAsync(string postId);
     }
 }

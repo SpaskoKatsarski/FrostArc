@@ -158,9 +158,41 @@
             return comment;
         }
 
-        public Task<PostFormViewModel> EditPostAsync()
+        public async Task EditAsync(PostFormViewModel model)
         {
-            throw new NotImplementedException();
+            Post? post = await this.dbContext.Posts
+                .FirstOrDefaultAsync(p => p.Id.ToString() == model.PostId);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            post.Title = model.Title;
+            post.Content = model.Content;
+            post.ImageUrl = model.ImageUrl;
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<PostFormViewModel> GetForEditAsync(string postId)
+        {
+            Post? post = await this.dbContext.Posts
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            return new PostFormViewModel()
+            {
+                Title = post.Title,
+                Content = post.Content,
+                ImageUrl = post.ImageUrl,
+                UserId = post.UserId.ToString(),
+                CommunityId = post.CommunityId.ToString()
+            };
         }
     }
 }

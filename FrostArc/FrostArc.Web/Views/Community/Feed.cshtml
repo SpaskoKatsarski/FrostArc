@@ -68,6 +68,11 @@
                     </div>
                 </div>
             </div>
+            @* TODO: Add UserId to PostViewModel class and check if they are the same with the current -> Add Edit and Delete button
+            @if (post)
+            {
+                
+            } *@
             <div class="card-footer">
                 <h6>Comments:</h6>
                 @foreach (var comment in post.Comments)

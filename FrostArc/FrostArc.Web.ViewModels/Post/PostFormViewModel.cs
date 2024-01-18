@@ -1,15 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FrostArc.Web.ViewModels.Post
+﻿namespace FrostArc.Web.ViewModels.Post
 {
+    using System.ComponentModel.DataAnnotations;
+    using static Common.DataValidationConstants.Post;
+
     public class PostFormViewModel
     {
+        public string? PostId { get; set; }
+
         [Required]
-        [MaxLength(100)]
+        [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
         [Display(Name = "Image URL")]

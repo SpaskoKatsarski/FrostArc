@@ -43,6 +43,41 @@
             return RedirectToAction("Feed", "Community", new { id = model.CommunityId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(string postId)
+        {
+            try
+            {
+                PostFormViewModel post = await this.postService.GetForEditAsync(postId);
+
+                return View(post);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PostFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await this.postService.EditAsync(model);
+
+                return RedirectToAction("Feed", "Community", new { id = model.CommunityId });
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Like(string id, string userId)
         {
