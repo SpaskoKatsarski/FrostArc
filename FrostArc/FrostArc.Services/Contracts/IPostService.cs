@@ -28,5 +28,9 @@
         Task<PostFormViewModel> GetForEditAsync(string postId);
 
         Task<bool> IsUserCreatorAsync(string postId, string userId);
+
+        Task<PostDeleteViewModel> GetForDeleteAsync(string postId);
+
+        Task DeleteAsync(PostDeleteViewModel model);
     }
 }

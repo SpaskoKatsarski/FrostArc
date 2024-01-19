@@ -18,6 +18,7 @@
         public async Task<IEnumerable<GenreAllViewModel>> GetAllAsync()
         {
             return await this.dbContext.Genres
+                .Where(g => !g.IsDeleted)
                 .Select(g => new GenreAllViewModel()
                 {
                     Id = g.Id.ToString(),

@@ -53,6 +53,7 @@
                 DisplayName = user.DisplayName,
                 ProfilePicture = user.ProfilePicture!,
                 Posts = user.Posts
+                .Where(p => !p.IsDeleted)
                 .Select(p => new PostAllViewModel()
                 {
                     Id = p.Id.ToString(),
@@ -62,6 +63,7 @@
                     Likes = p.Likes,
                     Dislikes = p.Dislikes,
                     Comments = p.Comments
+                        .Where(c => !c.IsDeleted)
                         .Select(c => new CommentPostViewModel()
                         {
                             UserId = c.UserId.ToString(),
@@ -69,12 +71,14 @@
                         }),
                     Community = p.Community.Name
                 }),
-                Communitites = user.Communities.Select(c => new CommunityAllViewModel()
-                {
-                    Id = c.Id.ToString(),
-                    Name = c.Name,
-                    ImageUrl = c.ImageUrl
-                })
+                Communitites = user.Communities
+                    .Where(c => !c.IsDeleted)
+                    .Select(c => new CommunityAllViewModel()
+                    {
+                        Id = c.Id.ToString(),
+                        Name = c.Name,
+                        ImageUrl = c.ImageUrl
+                    })
             };
         }
 

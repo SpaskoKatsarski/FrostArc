@@ -20,6 +20,7 @@
         public async Task<IEnumerable<PlatformAllViewModel>> GetAllAsync()
         {
             return await this.dbContext.Platforms
+                .Where(p => !p.IsDeleted)
                 .Select(p => new PlatformAllViewModel()
                 {
                     Id = p.Id,
@@ -32,6 +33,7 @@
             Platform? platform = await this.dbContext.Platforms
                 .Include(p => p.GamePlatforms)
                 .ThenInclude(gp => gp.Game)
+                .Where(p => !p.IsDeleted)
                 .FirstOrDefaultAsync(p => p.Id == platformId);
 
             if (platform == null)

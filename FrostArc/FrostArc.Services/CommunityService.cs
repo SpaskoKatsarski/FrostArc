@@ -22,6 +22,7 @@
         public async Task AddUserToCommunityAsync(string communityId, string userId)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -69,6 +70,7 @@
         public async Task DeleteCommunityAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -83,6 +85,7 @@
         public async Task<Community> FindAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -96,6 +99,7 @@
         public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync()
         {
             return await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .OrderByDescending(c => c.Users.Count)
                 .Select(c => new CommunityAllViewModel
                 {
@@ -132,6 +136,7 @@
                 .ThenInclude(p => p.Comments)
                 .Include(c => c.Users)
                 .Include(c => c.Owner)
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (community == null)
@@ -147,6 +152,7 @@
                 ImageUrl = community.ImageUrl,
                 MembersCount = await this.GetMembersCountAsync(id),
                 Posts = community.Posts
+                    .Where(p => !p.IsDeleted)
                     .Select(p => new PostAllViewModel()
                     {
                         Id = p.Id.ToString(),
@@ -181,6 +187,7 @@
                 .ThenInclude(p => p.Comments)
                 .Include(c => c.Users)
                 .Include(c => c.Owner)
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (community == null)
@@ -203,6 +210,7 @@
         public async Task<int> GetMembersCountAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -216,6 +224,7 @@
         public async Task<IEnumerable<CommunityAllViewModel>> GetTop3Async()
         {
             IEnumerable<CommunityAllViewModel> communitites = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .OrderByDescending(c => c.Users.Count)
                 .Select(c => new CommunityAllViewModel()
                 {
@@ -236,6 +245,7 @@
         {
             Community? community = await this.dbContext.Communities
                 .Include(c => c.Users)
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -248,8 +258,14 @@
 
         public async Task<bool> IsUserOwnerAsync(string communityId, string userId)
         {
-            Community community = await this.dbContext.Communities
-                .FindAsync(Guid.Parse(communityId));
+            Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
 
             return community!.OwnerId.ToString() == userId;
         }
@@ -269,6 +285,7 @@
         public async Task UpdateCommunityAsync(CommunityFormViewModel updateModel)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == updateModel.Id);
 
             if (community == null)
@@ -286,6 +303,7 @@
         public async Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
@@ -318,7 +336,8 @@
             }
 
             Community? community = await this.dbContext.Communities
-                .FindAsync(Guid.Parse(communityId));
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
             if (community == null)
             {

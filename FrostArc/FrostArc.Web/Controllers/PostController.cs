@@ -89,6 +89,52 @@
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(string postId)
+        {
+            bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, User.GetId()!);
+
+            if (!isUserCreator)
+            {
+                throw new InvalidOperationException("User is not the creator of the post!");
+            }
+
+            try
+            {
+                PostDeleteViewModel model = await this.postService.GetForDeleteAsync(postId);
+
+                return View(model);
+            }
+            catch (ArgumentException ae)
+            {
+                return Forbid(ae.Message);
+            }
+
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(PostDeleteViewModel model)
+        {
+            bool isUserCreator = await this.postService.IsUserCreatorAsync(model.Id, User.GetId()!);
+
+            if (!isUserCreator)
+            {
+                throw new InvalidOperationException("User is not the creator of the post!");
+            }
+
+            try
+            {
+                await this.postService.DeleteAsync(model);
+
+                return RedirectToAction("Feed", "Community", new { id = model.CommunityId });
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Like(string id, string userId)
         {

@@ -21,6 +21,7 @@
         {
             return await this.dbContext.Developers
                 .AsNoTracking()
+                .Where(c => !c.IsDeleted)
                 .Select(d => new DeveloperAllViewModel()
                 {
                     Id = d.Id.ToString(),
@@ -34,6 +35,7 @@
         {
             Developer? dev = await this.dbContext.Developers
                 .Include(d => d.Games)
+                .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(d => d.Id.ToString() == id);
 
             if (dev == null)

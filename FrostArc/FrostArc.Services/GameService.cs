@@ -19,7 +19,8 @@
         public async Task<IEnumerable<GameListViewModel>> GetAllAsync(string? genreId)
         {
             IQueryable<Game> query = this.dbContext.Games
-                .AsNoTracking();
+                .AsNoTracking()
+                .Where(g => !g.IsDeleted);
         
             if (genreId != null)
             {
@@ -41,6 +42,7 @@
                 .Include(g => g.Genre)
                 .Include(g => g.GamePlatforms)
                 .ThenInclude(gp => gp.Platform)
+                .Where(g => !g.IsDeleted)
                 .FirstOrDefaultAsync(g => g.Id.ToString() == id);
 
             if (game == null)

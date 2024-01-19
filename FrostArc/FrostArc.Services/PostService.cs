@@ -41,7 +41,8 @@
         public async Task<int> LikeAsync(string id, string userId)
         {
             Post? post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(id));
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == id);
 
             if (post == null)
             {
@@ -63,8 +64,9 @@
 
         public async Task<int> DislikeAsync(string id, string userId)
         {
-            Post post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(id));
+            Post? post = await this.dbContext.Posts
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == id);
 
             if (post == null)
             {
@@ -93,7 +95,8 @@
         public async Task<int> UnlikeAsync(string id, string userId)
         {
             Post post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(id));
+                .Where(p => !p.IsDeleted)
+                .FirstAsync(p => p.Id.ToString() == id);
 
             PostReaction pr = await this.dbContext.PostsReactions
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
@@ -111,7 +114,8 @@
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
 
             Post post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(id));
+                .Where(p => !p.IsDeleted)
+                .FirstAsync(p => p.Id.ToString() == id);
 
             pr.Dislike = false;
             pr.Like = true;
@@ -137,7 +141,8 @@
         public async Task<Comment> AddCommentAsync(string postId, string userId, string commentContent)
         {
             Post? post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(postId));
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
 
             if (post == null)
             {
@@ -145,7 +150,7 @@
             }
 
             Comment comment = new Comment()
-            { 
+            {
                 Content = commentContent,
                 PostId = Guid.Parse(postId),
                 UserId = Guid.Parse(userId)
@@ -161,6 +166,7 @@
         public async Task EditAsync(PostFormViewModel model)
         {
             Post? post = await this.dbContext.Posts
+                .Where(p => !p.IsDeleted)
                 .FirstOrDefaultAsync(p => p.Id.ToString() == model.PostId);
 
             if (post == null)
@@ -178,7 +184,8 @@
         public async Task<PostFormViewModel> GetForEditAsync(string postId)
         {
             Post? post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(postId));
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
 
             if (post == null)
             {
@@ -198,7 +205,8 @@
         public async Task<bool> IsUserCreatorAsync(string postId, string userId)
         {
             Post? post = await this.dbContext.Posts
-                .FindAsync(Guid.Parse(postId));
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
 
             if (post == null)
             {
@@ -206,6 +214,44 @@
             }
 
             return post.UserId.ToString() == userId;
+        }
+
+        public async Task<PostDeleteViewModel> GetForDeleteAsync(string postId)
+        {
+            Post? post = await this.dbContext.Posts
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            return new PostDeleteViewModel()
+            {
+                Id = post.Id.ToString(),
+                Title = post.Title,
+                Content = post.Content,
+                ImageUrl = post.ImageUrl,
+                CommunityId = post.CommunityId.ToString(),
+                UserId = post.UserId.ToString()
+            };
+        }
+
+        public async Task DeleteAsync(PostDeleteViewModel model)
+        {
+            Post? post = await this.dbContext.Posts
+                .Where(p => !p.IsDeleted)
+                .FirstOrDefaultAsync(p => p.Id.ToString() == model.Id);
+
+            if (post == null)
+            {
+                throw new ArgumentException("Post with the provided ID does not exist!");
+            }
+
+            post.IsDeleted = true;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }
