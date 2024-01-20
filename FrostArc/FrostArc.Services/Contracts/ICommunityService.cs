@@ -35,6 +35,9 @@
         Task<bool> IsUserOwnerAsync(string communityId, string userId);
 
         Task<bool> IsUserMemberAsync(string communityId, string userId);
+
         Task RemoveUserFromCommunityAsync(string communityId, string userId);
+
+        Task RemovePostsForUserAsync(string communityId, string userId);
     }
 }

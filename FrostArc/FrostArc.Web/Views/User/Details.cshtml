@@ -10,7 +10,10 @@
 <div class="user-profile">
     <h3>@Model.DisplayName</h3>
     <img src="@Model.ProfilePicture" alt="Profile Picture" style="width:150px;height:150px;" />
-    <a asp-area="" asp-controller="User" asp-action="ChangePicture">Change Avatar</a>
+    @if (Model.Id == User.GetId())
+    {
+        <a class="btn btn-primary" asp-area="" asp-controller="User" asp-action="ChangePicture">Change Avatar</a>
+    }
 </div>
 
 <hr />

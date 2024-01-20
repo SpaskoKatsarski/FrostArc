@@ -112,7 +112,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Users(string communityId)
+        public async Task<IActionResult> Members(string communityId)
         {
             if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
             {
@@ -131,8 +131,8 @@
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RemoveUser(string communityId, string userId)
+        [HttpGet]
+        public async Task<IActionResult> Kick(string userId, string communityId)
         {
             if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
             {
@@ -148,7 +148,7 @@
                 return BadRequest(ae.Message);
             }
 
-            return View("Users", new { communityId });
+            return RedirectToAction("Members", new { communityId });
         }
     }
 }

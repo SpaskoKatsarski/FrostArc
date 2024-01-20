@@ -15,6 +15,7 @@
         [MaxLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
+        [Url]
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; }
 

@@ -41,7 +41,7 @@
 
         @if (isUserOwner)
         {
-            <a class="btn btn-primary" asp-controller="Community" asp-action="Users" asp-route-communityId="@Model.Id">Members</a>
+            <a class="btn btn-primary" asp-controller="Community" asp-action="Members" asp-route-communityId="@Model.Id">Members</a>
         }
     </ul>
 }
@@ -53,7 +53,8 @@
     {
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="card-title">@post.Title</h5>
+                <h5><a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" style="text-decoration: none;">@post.User</a>:</h5>
+                <h4 class="card-title">@post.Title</h4>
             </div>
             <div class="card-body">
                 @if (!string.IsNullOrEmpty(post.ImageUrl))

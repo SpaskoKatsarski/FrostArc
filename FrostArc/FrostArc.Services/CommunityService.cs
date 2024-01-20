@@ -161,6 +161,7 @@
                         ImageUrl = p.ImageUrl,
                         Likes = p.Likes,
                         Dislikes = p.Dislikes,
+                        User = p.User.DisplayName,
                         UserId = p.UserId.ToString(),
                         Comments = p.Comments
                             .Select(c => new CommentPostViewModel()
@@ -303,6 +304,7 @@
         public async Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId)
         {
             Community? community = await this.dbContext.Communities
+                .Include(c => c.Users)
                 .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
@@ -336,6 +338,7 @@
             }
 
             Community? community = await this.dbContext.Communities
+                .Include(c => c.Users)
                 .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
 
@@ -345,6 +348,34 @@
             }
 
             community.Users.Remove(user);
+            await this.RemovePostsForUserAsync(communityId, userId);
+        }
+
+        public async Task RemovePostsForUserAsync(string communityId, string userId)
+        {
+            ApplicationUser? user = await this.dbContext.Users
+                .Include(c => c.Posts)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with the provided ID does not exist!");
+            }
+
+            Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            foreach (var post in user.Posts.Where(p => p.CommunityId.ToString() == community.Id.ToString()))
+            {
+                community.Posts.Remove(post);
+            }
+
             await this.dbContext.SaveChangesAsync();
         }
     }
