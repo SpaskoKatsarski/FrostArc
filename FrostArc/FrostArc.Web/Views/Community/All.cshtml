@@ -6,6 +6,13 @@
 
 <h2>Communities</h2>
 
+<form asp-controller="Community" asp-action="All" method="get">
+    <div class="form-group mb-2 text-center">
+        <input type="text" name="queryStr" class="form-control" placeholder="Search communities" />
+        <button type="submit" class="btn btn-primary mt-2 mb-3">Search</button>
+    </div>
+</form>
+
 <div class="container">
     @if (Model.Count() > 0)
     {
@@ -27,6 +34,6 @@
     }
     else
     {
-        <p>There are currently no communities.</p>
+        <p>No communities found.</p>
     }
 </div>

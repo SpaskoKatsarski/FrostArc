@@ -96,18 +96,24 @@
             return community;
         }
 
-        public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync()
+        public async Task<IEnumerable<CommunityAllViewModel>> GetAllAsync(string? queryStr)
         {
-            return await this.dbContext.Communities
+            IQueryable<Community> query = this.dbContext.Communities
                 .Where(c => !c.IsDeleted)
-                .OrderByDescending(c => c.Users.Count)
-                .Select(c => new CommunityAllViewModel
+                .OrderByDescending(c => c.Users.Count);
+
+            if (queryStr != null)
+            {
+                query = query.Where(c => c.Name.ToLower().Contains(queryStr.ToLower()));
+            }
+
+            return query
+                .Select(c => new CommunityAllViewModel()
                 {
                     Id = c.Id.ToString(),
                     Name = c.Name,
                     ImageUrl = c.ImageUrl
-                })
-                .ToListAsync();
+                });
         }
 
         public async Task<IEnumerable<CommunityAllViewModel>> GetCommunitiesForUserAsync(string userId)

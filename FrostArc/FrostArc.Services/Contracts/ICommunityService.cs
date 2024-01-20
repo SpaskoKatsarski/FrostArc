@@ -3,11 +3,10 @@
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.Community;
     using FrostArc.Web.ViewModels.Post;
-    using FrostArc.Web.ViewModels.User;
 
     public interface ICommunityService
     {
-        Task<IEnumerable<CommunityAllViewModel>> GetAllAsync();
+        Task<IEnumerable<CommunityAllViewModel>> GetAllAsync(string? queryStr);
 
         Task<Community> CreateAsync(CommunityFormViewModel model, string ownerId);
 

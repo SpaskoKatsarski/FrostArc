@@ -20,9 +20,10 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string? queryStr)
         {
-            IEnumerable<CommunityAllViewModel> communities = await this.communityService.GetAllAsync();
+            IEnumerable<CommunityAllViewModel> communities = await this.communityService
+                .GetAllAsync(queryStr);
 
             return View(communities);
         }
