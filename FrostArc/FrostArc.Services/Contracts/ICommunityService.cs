@@ -2,6 +2,7 @@
 {
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.Community;
+    using FrostArc.Web.ViewModels.Post;
     using FrostArc.Web.ViewModels.User;
 
     public interface ICommunityService
@@ -39,5 +40,7 @@
         Task RemoveUserFromCommunityAsync(string communityId, string userId);
 
         Task RemovePostsForUserAsync(string communityId, string userId);
+
+        Task<IEnumerable<PostAllViewModel>> GetPostsForCommunityAsync(string communityId);
     }
 }

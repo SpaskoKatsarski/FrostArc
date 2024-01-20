@@ -151,25 +151,7 @@
                 Description = community.Description,
                 ImageUrl = community.ImageUrl,
                 MembersCount = await this.GetMembersCountAsync(id),
-                Posts = community.Posts
-                    .Where(p => !p.IsDeleted)
-                    .Select(p => new PostAllViewModel()
-                    {
-                        Id = p.Id.ToString(),
-                        Title = p.Title,
-                        Content = p.Content,
-                        ImageUrl = p.ImageUrl,
-                        Likes = p.Likes,
-                        Dislikes = p.Dislikes,
-                        User = p.User.DisplayName,
-                        UserId = p.UserId.ToString(),
-                        Comments = p.Comments
-                            .Select(c => new CommentPostViewModel()
-                            {
-                                UserId = c.UserId.ToString(),
-                                Content = c.Content
-                            })
-                    }),
+                Posts = await this.GetPostsForCommunityAsync(id),
                 Users = community.Users
                     .Select(u => new UserAllViewModel()
                     {
@@ -373,10 +355,47 @@
 
             foreach (var post in user.Posts.Where(p => p.CommunityId.ToString() == community.Id.ToString()))
             {
-                community.Posts.Remove(post);
+                //this.dbContext.Posts.Remove(post);
+                post.IsDeleted = true;
             }
 
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PostAllViewModel>> GetPostsForCommunityAsync(string communityId)
+        {
+            Community? community = await this.dbContext.Communities
+                .Include(c => c.Posts)
+                .ThenInclude(p => p.User)
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return community.Posts
+                .Where(p => !p.IsDeleted)
+                .Select(p => new PostAllViewModel()
+                {
+                    Id = p.Id.ToString(),
+                    Title = p.Title,
+                    Content = p.Content,
+                    ImageUrl = p.ImageUrl,
+                    Likes = p.Likes,
+                    Dislikes = p.Dislikes,
+                    User = p.User.DisplayName,
+                    UserId = p.User.Id.ToString(),
+                    Comments = p.Comments
+                        .Where(c=> !c.IsDeleted)
+                        .Select(c => new CommentPostViewModel()
+                        {
+                            UserId = c.UserId.ToString(),
+                            Content = c.Content
+                        }),
+                    Community = community.Name
+                });
         }
     }
 }
