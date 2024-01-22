@@ -115,11 +115,6 @@
         [HttpGet]
         public async Task<IActionResult> Members(string communityId)
         {
-            if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
-            {
-                return Forbid();
-            }
-
             try
             {
                 CommunityUsersViewModel communityUsers = await this.communityService.GetCommunityUsersAsync(communityId);

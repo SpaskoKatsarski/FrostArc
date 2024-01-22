@@ -39,10 +39,7 @@
             }
         }
 
-        @if (isUserOwner)
-        {
-            <a class="btn btn-primary" asp-controller="Community" asp-action="Members" asp-route-communityId="@Model.Id">Members</a>
-        }
+        <a class="btn btn-primary" asp-controller="Community" asp-action="Members" asp-route-communityId="@Model.Id">Members</a>
     </ul>
 }
 
