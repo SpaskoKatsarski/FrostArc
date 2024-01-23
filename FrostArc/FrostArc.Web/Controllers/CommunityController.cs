@@ -99,7 +99,7 @@
 
                 if (!isMember && !isOwner)
                 {
-                    return BadRequest("You should join this community in order to access its Feed.");
+                    return BadRequest("You have to join this community in order to access its feed.");
                 }
 
                 CommunityFeedViewModel model = await this.communityService.GetForFeedAsync(id);
