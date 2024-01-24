@@ -11,8 +11,8 @@
 
         public string ProfilePicture { get; set; } = null!;
 
-        public IEnumerable<PostAllViewModel> Posts { get; set; } = null!;
+        public Dictionary<string, List<PostAllViewModel>> PostsByCommunity { get; set; } = null!;
 
-        public IEnumerable<CommunityAllViewModel> Communitites { get; set; } = null!;
+        public IEnumerable<CommunityAllViewModel> Communities { get; set; } = null!;
     }
 }

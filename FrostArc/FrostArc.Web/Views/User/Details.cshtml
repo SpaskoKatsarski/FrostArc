@@ -16,43 +16,46 @@
     }
 </div>
 
-<hr />
-
-@if (Model.Posts.Any())
+@if (Model.PostsByCommunity.Any())
 {
     <h2>Posts</h2>
-    @foreach (var post in Model.Posts)
+    <hr />
+    @foreach (var kvp in Model.PostsByCommunity)
     {
-        <div class="post">
-            <h3>@post.Title</h3>
-            <p>@post.Content</p>
-            @if (!string.IsNullOrEmpty(post.ImageUrl))
-            {
-                <img src="@post.ImageUrl" alt="Post Image" style="max-width:100%;" />
-            }
-            <p>Likes: @post.Likes | Dislikes: @post.Dislikes</p>
-            <div>
-                <h4>Comments</h4>
-                @foreach (var comment in post.Comments)
+        <h3>Posts in <strong>@kvp.Key</strong>:</h3>
+        @foreach (var post in kvp.Value)
+        {
+            <div class="post">
+                <h3>@post.Title</h3>
+                <p>@post.Content</p>
+                @if (!string.IsNullOrEmpty(post.ImageUrl))
                 {
-                    UserDetailsViewModel currUser = await userService.GetInfoAsync(comment.UserId);
-
-                    <a asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@currUser.Id">
-                        @currUser.DisplayName:
-                    </a>
-                    <p>@comment.Content</p>
+                    <img src="@post.ImageUrl" alt="Post Image" style="max-width:100%;" />
                 }
+                <p>Likes: @post.Likes | Dislikes: @post.Dislikes</p>
+                <div>
+                    <h4>Comments</h4>
+                    @foreach (var comment in post.Comments)
+                    {
+                        UserDetailsViewModel currUser = await userService.GetInfoAsync(comment.UserId);
+
+                        <a asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@currUser.Id">
+                            @currUser.DisplayName:
+                        </a>
+                        <p>@comment.Content</p>
+                    }
+                </div>
             </div>
-        </div>
+        }
         <hr />
     }
 }
 
-@if (Model.Communitites.Any())
+@if (Model.Communities.Any())
 {
     <h2>Communities</h2>
     <div class="communities">
-        @foreach (var community in Model.Communitites)
+        @foreach (var community in Model.Communities)
         {
             <div class="community">
                 <h3><a asp-controller="Community" asp-action="Details" asp-route-id="@community.Id">@community.Name</a></h3>

@@ -9,6 +9,7 @@
     using FrostArc.Web.ViewModels.Post;
     using FrostArc.Web.ViewModels.Community;
     using FrostArc.Web.ViewModels.Comment;
+    using Microsoft.EntityFrameworkCore.Metadata;
 
     public class UserService : IUserService
     {
@@ -47,31 +48,15 @@
                 throw new ArgumentException("User with the provided ID does not exist!");
             }
 
+            Dictionary<string, List<PostAllViewModel>> postsByCommunity = this.GetPostsForCommunityAsync(user.Posts.Where(p => !p.IsDeleted));
+
             return new UserDetailsViewModel()
             {
                 Id = user.Id.ToString(),
                 DisplayName = user.DisplayName,
                 ProfilePicture = user.ProfilePicture!,
-                Posts = user.Posts
-                .Where(p => !p.IsDeleted)
-                .Select(p => new PostAllViewModel()
-                {
-                    Id = p.Id.ToString(),
-                    Title = p.Title,
-                    Content = p.Content,
-                    ImageUrl = p.ImageUrl,
-                    Likes = p.Likes,
-                    Dislikes = p.Dislikes,
-                    Comments = p.Comments
-                        .Where(c => !c.IsDeleted)
-                        .Select(c => new CommentPostViewModel()
-                        {
-                            UserId = c.UserId.ToString(),
-                            Content = c.Content
-                        }),
-                    Community = p.Community.Name
-                }),
-                Communitites = user.Communities
+                PostsByCommunity = postsByCommunity,
+                Communities = user.Communities
                     .Where(c => !c.IsDeleted)
                     .Select(c => new CommunityAllViewModel()
                     {
@@ -80,6 +65,39 @@
                         ImageUrl = c.ImageUrl
                     })
             };
+        }
+
+        private Dictionary<string, List<PostAllViewModel>> GetPostsForCommunityAsync(IEnumerable<Post> posts)
+        {
+            Dictionary<string, List<PostAllViewModel>> postsByCommunity = new Dictionary<string, List<PostAllViewModel>>();
+
+            foreach (var post in posts)
+            {
+                if (!postsByCommunity.ContainsKey(post.Community.Name))
+                {
+                    postsByCommunity.Add(post.Community.Name, new List<PostAllViewModel>());
+                }
+
+                postsByCommunity[post.Community.Name].Add(new PostAllViewModel()
+                {
+                    Id = post.Id.ToString(),
+                    Title = post.Title,
+                    Content = post.Content,
+                    ImageUrl = post.ImageUrl,
+                    Likes = post.Likes,
+                    Dislikes = post.Dislikes,
+                    Comments = post.Comments
+                                .Where(c => !c.IsDeleted)
+                                .Select(c => new CommentPostViewModel()
+                                {
+                                    UserId = c.UserId.ToString(),
+                                    Content = c.Content
+                                }),
+                    Community = post.Community.Name
+                });
+            }
+
+            return postsByCommunity;
         }
 
         public async Task<string> GetUserImageUrlAsync(string userId)
