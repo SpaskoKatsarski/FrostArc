@@ -6,6 +6,13 @@
 
 <h2>Game Library</h2>
 
+<form asp-controller="Game" asp-action="All" method="get">
+    <div class="form-group mb-2 text-center">
+        <input type="text" name="queryStr" class="form-control" placeholder="Search games" />
+        <button type="submit" class="btn btn-primary mt-2 mb-3">Search</button>
+    </div>
+</form>
+
 <div class="container">
     @if (Model.Count() > 0)
     {

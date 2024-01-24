@@ -4,7 +4,7 @@
 
     public interface IDeveloperService
     {
-        Task<IEnumerable<DeveloperAllViewModel>> GetAllAsync();
+        Task<IEnumerable<DeveloperAllViewModel>> GetAllAsync(string? queryStr);
 
         Task<DeveloperDetailsViewModel> GetDetailsAsync(string id);
     }

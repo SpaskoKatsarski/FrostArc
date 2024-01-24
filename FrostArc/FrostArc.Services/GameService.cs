@@ -16,7 +16,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<GameListViewModel>> GetAllAsync(string? genreId)
+        public async Task<IEnumerable<GameListViewModel>> GetAllAsync(string? genreId, string? queryStr)
         {
             IQueryable<Game> query = this.dbContext.Games
                 .AsNoTracking()
@@ -25,6 +25,11 @@
             if (genreId != null)
             {
                 query = query.Where(g => g.GenreId.ToString() == genreId);
+            }
+
+            if (queryStr != null)
+            {
+                query = query.Where(g => g.Title.ToLower().Contains(queryStr.ToLower()));
             }
 
             return await query.Select(g => new GameListViewModel()

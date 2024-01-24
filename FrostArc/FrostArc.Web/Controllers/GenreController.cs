@@ -18,9 +18,9 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string? queryStr)
         {
-            IEnumerable<GenreAllViewModel> genres = await this.genreService.GetAllAsync();
+            IEnumerable<GenreAllViewModel> genres = await this.genreService.GetAllAsync(queryStr);
 
             return View(genres);
         }

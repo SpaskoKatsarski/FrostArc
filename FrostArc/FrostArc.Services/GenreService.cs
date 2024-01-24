@@ -5,6 +5,7 @@
     using FrostArc.Web.ViewModels.Genre;
     using FrostArc.Services.Contracts;
     using FrostArc.Data;
+    using FrostArc.Data.Models;
 
     public class GenreService : IGenreService
     {
@@ -15,10 +16,18 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<GenreAllViewModel>> GetAllAsync()
+        public async Task<IEnumerable<GenreAllViewModel>> GetAllAsync(string? queryStr)
         {
-            return await this.dbContext.Genres
-                .Where(g => !g.IsDeleted)
+            IQueryable<Genre> query = this.dbContext.Genres
+                .AsNoTracking()
+                .Where(g => !g.IsDeleted);
+
+            if (queryStr != null)
+            {
+                query = query.Where(g => g.Name.ToLower().Contains(queryStr.ToLower()));
+            }
+
+            return await query
                 .Select(g => new GenreAllViewModel()
                 {
                     Id = g.Id.ToString(),

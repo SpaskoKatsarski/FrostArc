@@ -17,11 +17,18 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<DeveloperAllViewModel>> GetAllAsync()
+        public async Task<IEnumerable<DeveloperAllViewModel>> GetAllAsync(string? queryStr)
         {
-            return await this.dbContext.Developers
+            IQueryable<Developer> query = this.dbContext.Developers
                 .AsNoTracking()
-                .Where(c => !c.IsDeleted)
+                .Where(d => !d.IsDeleted);
+
+            if (queryStr != null)
+            {
+                query = query.Where(d => d.Name.ToLower().Contains(queryStr.ToLower()));
+            }
+
+            return await query
                 .Select(d => new DeveloperAllViewModel()
                 {
                     Id = d.Id.ToString(),

@@ -18,9 +18,9 @@
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string? queryStr)
         {
-            IEnumerable<DeveloperAllViewModel> devs = await this.developerService.GetAllAsync();
+            IEnumerable<DeveloperAllViewModel> devs = await this.developerService.GetAllAsync(queryStr);
 
             return View(devs);
         }

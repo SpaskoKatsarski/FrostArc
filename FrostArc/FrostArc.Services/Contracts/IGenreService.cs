@@ -4,6 +4,6 @@
 
     public interface IGenreService
     {
-        Task<IEnumerable<GenreAllViewModel>> GetAllAsync();
+        Task<IEnumerable<GenreAllViewModel>> GetAllAsync(string? queryStr);
     }
 }
