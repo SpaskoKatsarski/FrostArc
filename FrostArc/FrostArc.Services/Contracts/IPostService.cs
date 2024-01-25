@@ -15,11 +15,17 @@
 
         Task<bool> HasUserInteractedAsync(string id, string userId);
 
-        Task<int> UnlikeAsync(string id, string userId);
+        Task<Tuple<int, int>> UnlikeAsync(string id, string userId);
 
         Task<Tuple<int, int>> ChangeDislikeToLikeAsync(string id, string userId);
 
+        Task<Tuple<int, int>> UndislikeAsync(string id, string userId);
+
+        Task<Tuple<int, int>> ChangeLikeToDislikeAsync(string id, string userId);
+
         Task<bool> HasLikedAsync(string id, string userId);
+
+        Task<bool> HasDislikedAsync(string id, string userId);
 
         Task<Comment> AddCommentAsync(string postId, string userId, string comment);
 

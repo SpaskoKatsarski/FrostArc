@@ -92,7 +92,7 @@
                 .AnyAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
         }
 
-        public async Task<int> UnlikeAsync(string id, string userId)
+        public async Task<Tuple<int, int>> UnlikeAsync(string id, string userId)
         {
             Post post = await this.dbContext.Posts
                 .Where(p => !p.IsDeleted)
@@ -101,11 +101,13 @@
             PostReaction pr = await this.dbContext.PostsReactions
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
 
-            this.dbContext.PostsReactions.Remove(pr);
             post.Likes--;
+            this.dbContext.PostsReactions.Remove(pr);
             await this.dbContext.SaveChangesAsync();
 
-            return post.Likes;
+            Tuple<int, int> tuple = new Tuple<int, int>(post.Likes, post.Dislikes);
+
+            return tuple;
         }
 
         public async Task<Tuple<int, int>> ChangeDislikeToLikeAsync(string id, string userId)
@@ -136,6 +138,54 @@
                 .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
 
             return pr.Like;
+        }
+
+        public async Task<bool> HasDislikedAsync(string id, string userId)
+        {
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            return pr.Dislike;
+        }
+
+        public async Task<Tuple<int, int>> UndislikeAsync(string id, string userId)
+        {
+            Post post = await this.dbContext.Posts
+                 .Where(p => !p.IsDeleted)
+                 .FirstAsync(p => p.Id.ToString() == id);
+
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            post.Dislikes--;
+            this.dbContext.PostsReactions.Remove(pr);
+            await this.dbContext.SaveChangesAsync();
+
+            Tuple<int, int> tuple = new Tuple<int, int>(post.Likes, post.Dislikes);
+
+            return tuple;
+        }
+
+        public async Task<Tuple<int, int>> ChangeLikeToDislikeAsync(string id, string userId)
+        {
+            PostReaction pr = await this.dbContext.PostsReactions
+                .FirstAsync(pr => pr.PostId.ToString() == id && pr.UserId.ToString() == userId);
+
+            Post post = await this.dbContext.Posts
+                .Where(p => !p.IsDeleted)
+                .FirstAsync(p => p.Id.ToString() == id);
+
+            pr.Like = false;
+            pr.Dislike = true;
+
+            post.Likes--;
+            post.Dislikes++;
+
+            await this.dbContext.SaveChangesAsync();
+
+            Tuple<int, int> tuple = new Tuple<int, int>(post.Likes, post.Dislikes);
+
+            return tuple;
         }
 
         public async Task<Comment> AddCommentAsync(string postId, string userId, string commentContent)

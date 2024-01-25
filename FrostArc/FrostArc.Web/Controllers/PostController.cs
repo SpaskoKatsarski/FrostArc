@@ -63,7 +63,7 @@
             {
                 return BadRequest(ae.Message);
             }
-            catch(InvalidOperationException ioe)
+            catch (InvalidOperationException ioe)
             {
                 return Forbid(ioe.Message);
             }
@@ -110,7 +110,7 @@
                 return Forbid(ae.Message);
             }
 
-            
+
         }
 
         [HttpPost]
@@ -140,27 +140,27 @@
         {
             try
             {
-                int updatedLikes;
+                Tuple<int, int> tuple;
 
                 if (await this.postService.HasUserInteractedAsync(id, userId))
                 {
                     if (await this.postService.HasLikedAsync(id, userId))
                     {
-                        updatedLikes = await this.postService.UnlikeAsync(id, userId);
+                        tuple = await this.postService.UnlikeAsync(id, userId);
                     }
                     else
                     {
-                        Tuple<int, int> tuple = await this.postService.ChangeDislikeToLikeAsync(id, userId);
-
-                        return Json(new { likes = tuple.Item1, dislikes = tuple.Item2 });
+                        tuple = await this.postService.ChangeDislikeToLikeAsync(id, userId);
                     }
                 }
                 else
                 {
-                    updatedLikes = await this.postService.LikeAsync(id, userId);
+                    int likes = await this.postService.LikeAsync(id, userId);
+
+                    tuple = new Tuple<int, int>(likes, 0);
                 }
 
-                return Json(new { likes = updatedLikes });
+                return Json(new { likes = tuple.Item1, dislikes = tuple.Item2 });
             }
             catch (ArgumentException ae)
             {
@@ -177,9 +177,27 @@
         {
             try
             {
-                int updatedDislikes = await this.postService.DislikeAsync(id, userId);
+                Tuple<int, int> tuple;
 
-                return Json(new { dislikes = updatedDislikes });
+                if (await this.postService.HasUserInteractedAsync(id, userId))
+                {
+                    if (await this.postService.HasDislikedAsync(id, userId))
+                    {
+                        tuple = await this.postService.UndislikeAsync(id, userId);
+                    }
+                    else
+                    {
+                        tuple = await this.postService.ChangeLikeToDislikeAsync(id, userId);
+                    }
+                }
+                else
+                {
+                    int dislikes = await this.postService.DislikeAsync(id, userId);
+
+                    tuple = new Tuple<int, int>(0, dislikes);
+                }
+
+                return Json(new { likes = tuple.Item1, dislikes = tuple.Item2 });
             }
             catch (ArgumentException ae)
             {

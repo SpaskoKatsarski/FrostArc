@@ -6,7 +6,7 @@
         var postId = $(this).data('post-id');
         var userId = $(this).data('user-id');
         var likeButton = $(this);
-        var dislikeButton = document.querySelector('dislike-btn');
+        var dislikeButton = $(this).closest('.post').find('.dislike-btn');
         $.ajax({
             url: '/Post/Like',
             type: 'POST',
@@ -27,7 +27,7 @@
         var postId = $(this).data('post-id');
         var userId = $(this).data('user-id');
         var dislikeButton = $(this);
-        var likeButton = document.querySelector('like-btn')
+        var likeButton = $(this).closest('.post').find('.like-btn');
         $.ajax({
             url: '/Post/Dislike',
             type: 'POST',
@@ -37,8 +37,8 @@
                 userId: userId
             },
             success: function (response) {
-                dislikeButton.text('👎 ' + response.dislikes);
                 likeButton.text('👍 ' + response.likes);
+                dislikeButton.text('👎 ' + response.dislikes);
             }
         });
     });
