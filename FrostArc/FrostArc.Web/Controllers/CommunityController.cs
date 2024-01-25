@@ -74,6 +74,49 @@
         }
 
         [HttpGet]
+        public async Task<IActionResult> Edit(string communityId)
+        {
+            string userId = this.User.GetId()!;
+            bool isUserOwner = await this.communityService.IsUserOwnerAsync(communityId, userId);
+
+            if (!isUserOwner)
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                CommunityFormViewModel model = await this.communityService.GetForEditAsync(communityId);
+
+                return View(model);
+            }
+            catch (ArgumentException ae)
+            {
+                return Forbid(ae.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CommunityFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await this.communityService.EditAsync(model);
+
+                return RedirectToAction("Feed", "Community", new { id = model.Id });
+            }
+            catch (ArgumentException ae)
+            {
+                return Forbid(ae.Message);
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Join(string id)
         {
             try

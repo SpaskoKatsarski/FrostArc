@@ -10,6 +10,8 @@
 
         Task<Community> CreateAsync(CommunityFormViewModel model, string ownerId);
 
+        Task EditAsync(CommunityFormViewModel model);
+
         Task UpdateCommunityAsync(CommunityFormViewModel updateModel);
 
         Task DeleteCommunityAsync(string communityId);
@@ -31,6 +33,8 @@
         Task<CommunityDetailsViewModel> GetForDetailsAsync(string id);
 
         Task<CommunityFeedViewModel> GetForFeedAsync(string id);
+
+        Task<CommunityFormViewModel> GetForEditAsync(string id);
 
         Task<bool> IsUserOwnerAsync(string communityId, string userId);
 

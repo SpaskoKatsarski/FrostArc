@@ -361,7 +361,6 @@
 
             foreach (var post in user.Posts.Where(p => p.CommunityId.ToString() == community.Id.ToString()))
             {
-                //this.dbContext.Posts.Remove(post);
                 post.IsDeleted = true;
             }
 
@@ -402,6 +401,44 @@
                         }),
                     Community = community.Name
                 });
+        }
+
+        public async Task<CommunityFormViewModel> GetForEditAsync(string id)
+        {
+            Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            return new CommunityFormViewModel()
+            {
+                Id = community.Id.ToString(),
+                Name = community.Name,
+                Description = community.Description,
+                ImageUrl = community.ImageUrl
+            };
+        }
+
+        public async Task EditAsync(CommunityFormViewModel model)
+        {
+            Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == model.Id);
+
+            if (community == null)
+            {
+                throw new ArgumentException("Community with the provided ID does not exist!");
+            }
+
+            community.Name = model.Name;
+            community.Description = model.Description;
+            community.ImageUrl = model.ImageUrl;
+
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

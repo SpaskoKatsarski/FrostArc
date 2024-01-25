@@ -1,13 +1,13 @@
 ﻿@model CommunityFormViewModel
 
 @{
-    ViewBag.Title = "Create Community";
+    ViewBag.Title = "Edit Community";
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<form asp-controller="Community" asp-action="Create" method="post">
+<form asp-area="" asp-controller="Community" asp-action="Edit" method="post" class="mt-4">
     <partial name="_CommunityFormPartial" model="@Model" />
 </form>
 
