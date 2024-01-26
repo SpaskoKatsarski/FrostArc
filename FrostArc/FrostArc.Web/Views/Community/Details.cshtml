@@ -16,6 +16,8 @@
 
 <p>Members: @Model.MembersCount</p>
 
+<a class="btn btn-primary" asp-controller="Community" asp-action="Members" asp-route-communityId="@Model.Id">See Members</a>
+
 @if (isOwner)
 {
     <div style="margin-top: 20px;">

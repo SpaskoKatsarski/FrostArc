@@ -189,5 +189,19 @@
 
             return RedirectToAction("Members", new { communityId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Leave(string userId, string communityId)
+        {
+            bool isMember = await this.communityService.IsUserMemberAsync(communityId, userId);
+            bool isOwner = await this.communityService.IsUserOwnerAsync(communityId, userId);
+
+            if (isMember && !isOwner)
+            {
+                await this.communityService.RemoveUserFromCommunityAsync(communityId, userId);
+            }
+
+            return RedirectToAction("Details", "Community", new { id = communityId });
+        }
     }
 }

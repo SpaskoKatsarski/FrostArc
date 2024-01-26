@@ -16,12 +16,16 @@
 
 <h3>Owner: @Model.OwnerName</h3>
 
+<p>Members: @Model.MembersCount</p>
+
 @if (isUserOwner)
 {
     <a asp-controller="Community" asp-action="Edit" asp-route-communityId="@Model.Id" class="btn btn-warning">Edit</a>
 }
-
-<p>Members: @Model.MembersCount</p>
+else
+{
+    <a asp-controller="Community" asp-action="Leave" asp-route-userId="@userId" asp-route-communityId="@Model.Id" class="btn btn-danger">Leave</a>
+}
 
 @if (Model.Users.Any())
 {
