@@ -20,7 +20,7 @@
 
         Task<IEnumerable<CommunityAllViewModel>> SearchAsync(string queryStr);
 
-        Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId);
+        Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId, string? queryStr);
 
         Task<int> GetMembersCountAsync(string communityId);
 

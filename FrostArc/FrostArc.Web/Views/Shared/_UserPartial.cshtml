@@ -15,9 +15,10 @@
             </a>
             <div id="dropdown-items" class="dropdown-menu">
                 <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Details" asp-route-id="@userId">Profile</a>
+                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Inbox" asp-route-id="@userId">Inbox</a>
                 <a class="dropdown-item" asp-area="" asp-controller="Community" asp-action="Create" asp-route-userId="@userId">Create a Community</a>
                 <hr />
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <form class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                     <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
                 </form>
             </div>

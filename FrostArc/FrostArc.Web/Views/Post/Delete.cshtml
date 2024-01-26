@@ -9,9 +9,12 @@
 
 <form method="post" asp-controller="Post" asp-action="Delete">
     <div class="row">
-        <div class="col-md-4">
-            <img class="card-img-top" src="@Model.ImageUrl" alt="Post image">
-        </div>
+        @if (Model.ImageUrl != null)
+        {
+            <div class="col-md-4">
+                <img class="card-img-top" src="@Model.ImageUrl" alt="Post image">
+            </div>
+        }
         <div class="col-md-8">
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>

@@ -116,35 +116,35 @@
             }
         }
 
-            [HttpGet]
-            public IActionResult ChangePicture()
-            {
-                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        [HttpGet]
+        public IActionResult ChangePicture()
+        {
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-                return View(new UserProfilePictureViewModel()
-                {
-                    UserId = userId
-                });
+            return View(new UserProfilePictureViewModel()
+            {
+                UserId = userId
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePicture(UserProfilePictureViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
-            [HttpPost]
-            public async Task<IActionResult> ChangePicture(UserProfilePictureViewModel model)
+            try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
+                await this.userService.UpdateAvatarAsync(model.UserId, model.ImageUrl);
 
-                try
-                {
-                    await this.userService.UpdateAvatarAsync(model.UserId, model.ImageUrl);
-
-                    return RedirectToAction("Details", "User", new { id = model.UserId });
-                }
-                catch (ArgumentException ae)
-                {
-                    return BadRequest(ae.Message);
-                }
+                return RedirectToAction("Details", "User", new { id = model.UserId });
             }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
     }
 }

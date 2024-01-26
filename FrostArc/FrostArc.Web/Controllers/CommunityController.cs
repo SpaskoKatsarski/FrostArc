@@ -156,11 +156,11 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Members(string communityId)
+        public async Task<IActionResult> Members(string communityId, string? queryStr)
         {
             try
             {
-                CommunityUsersViewModel communityUsers = await this.communityService.GetCommunityUsersAsync(communityId);
+                CommunityUsersViewModel communityUsers = await this.communityService.GetCommunityUsersAsync(communityId, queryStr);
 
                 return View(communityUsers);
             }

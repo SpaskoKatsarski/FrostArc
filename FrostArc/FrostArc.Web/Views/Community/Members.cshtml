@@ -9,6 +9,14 @@
 
 <h2>@Model.Name's Members</h2>
 
+<form asp-controller="Community" asp-action="Members" method="get">
+    <div class="form-group mb-2 text-center">
+        <input type="text" name="queryStr" class="form-control" placeholder="Search users" />
+        <button type="submit" class="btn btn-primary mt-2 mb-3">Search</button>
+    </div>
+    <input type="hidden" name="communityId" value="@Model.Id" />
+</form>
+
 @if (Model.Users.Any())
 {
     <div class="community-members">

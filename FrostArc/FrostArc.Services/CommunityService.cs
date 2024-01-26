@@ -289,7 +289,7 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId)
+        public async Task<CommunityUsersViewModel> GetCommunityUsersAsync(string communityId, string? queryStr)
         {
             Community? community = await this.dbContext.Communities
                 .Include(c => c.Users)
@@ -301,7 +301,7 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            return new CommunityUsersViewModel()
+            CommunityUsersViewModel model = new CommunityUsersViewModel()
             {
                 Id = community.Id.ToString(),
                 Name = community.Name,
@@ -313,6 +313,13 @@
                             ProfilePictureUrl = u.ProfilePicture
                         }).ToList()
             };
+
+            if (queryStr != null)
+            {
+                model.Users = model.Users.Where(u => u.DisplayName.ToLower().Contains(queryStr.ToLower()));
+            }
+
+            return model;
         }
 
         public async Task RemoveUserFromCommunityAsync(string communityId, string userId)
