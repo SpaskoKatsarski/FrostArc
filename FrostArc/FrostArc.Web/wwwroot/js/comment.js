@@ -3,7 +3,7 @@
 
     Array.from(commentBtns).forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var commentSection = this.nextElementSibling;
+            var commentSection = document.querySelector('.comment-section');
             if (commentSection.style.display === 'none' || commentSection.style.display === '') {
                 commentSection.style.display = 'block';
             } else {
@@ -17,18 +17,24 @@ $(document).ready(function () {
     $('.submit-comment').click(function () {
         var postId = $(this).data('post-id');
         var userId = $(this).data('user-id');
-        var commentContent = $(this).closest('.comment-section').find('.comment-field').val();
+        var commentContent = $(this).closest('.post').find('.comment-field').val();
 
         var token = $('input[name="__RequestVerificationToken"]').val();
-        var headers = { RequestVerificationToken: token };
+
+        var data = {
+            PostId: postId,
+            UserId: userId,
+            Content: commentContent
+        }
 
         $.ajax({
             url: '/Post/Comment',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ postId: postId, userId: userId, content: commentContent }),
-            headers: headers,
+            data: JSON.stringify(data),
+            headers: { RequestVerificationToken: token },
             success: function (response) {
+                /*Move the alert away from here*/
                 alert("Comment posted successfully!");
                 var newCommentHtml = '<li><strong>' + response.newCommentUserId + ':</strong> ' + response.newComment + '</li>';
                 $('#comments-' + postId).append(newCommentHtml);

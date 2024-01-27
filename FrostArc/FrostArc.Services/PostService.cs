@@ -6,6 +6,7 @@
     using FrostArc.Data.Models;
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Post;
+    using FrostArc.Web.ViewModels.Comment;
 
     public class PostService : IPostService
     {
@@ -188,11 +189,12 @@
             return tuple;
         }
 
-        public async Task<Comment> AddCommentAsync(string postId, string userId, string commentContent)
+        public async Task<Comment> AddCommentAsync(CommentInputViewModel inputModel)
         {
             Post? post = await this.dbContext.Posts
+                .Include(p => p.Comments)
                 .Where(p => !p.IsDeleted)
-                .FirstOrDefaultAsync(p => p.Id.ToString() == postId);
+                .FirstOrDefaultAsync(p => p.Id.ToString() == inputModel.PostId);
 
             if (post == null)
             {
@@ -201,12 +203,10 @@
 
             Comment comment = new Comment()
             {
-                Content = commentContent,
-                PostId = Guid.Parse(postId),
-                UserId = Guid.Parse(userId)
+                Content = inputModel.Content,
+                PostId = Guid.Parse(inputModel.PostId),
+                UserId = Guid.Parse(inputModel.UserId)
             };
-
-            post.Comments.Add(comment);
 
             await this.dbContext.SaveChangesAsync();
 

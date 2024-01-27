@@ -7,6 +7,7 @@
     using FrostArc.Services.Contracts;
     using FrostArc.Web.Infrastructire.Extensions;
     using FrostArc.Data.Models;
+    using FrostArc.Web.ViewModels.Comment;
 
     [Authorize]
     public class PostController : Controller
@@ -210,11 +211,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Comment(string postId, string userId, string content)
+        public async Task<IActionResult> Comment([FromBody]CommentInputViewModel inputModel)
         {
             try
             {
-                Comment comment = await this.postService.AddCommentAsync(postId, userId, content);
+                Comment comment = await this.postService.AddCommentAsync(inputModel);
 
                 return Json(new { newComment = comment.Content, newCommentUserId = comment.UserId.ToString() });
             }
