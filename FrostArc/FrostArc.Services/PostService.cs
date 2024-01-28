@@ -189,7 +189,7 @@
             return tuple;
         }
 
-        public async Task<Comment> AddCommentAsync(CommentInputViewModel inputModel)
+        public async Task<Tuple<string, string>> AddCommentAsync(CommentInputViewModel inputModel)
         {
             Post? post = await this.dbContext.Posts
                 .Include(p => p.Comments)
@@ -211,7 +211,14 @@
             await this.dbContext.Comments.AddAsync(comment);
             await this.dbContext.SaveChangesAsync();
 
-            return comment;
+            ApplicationUser user = await this.dbContext.Users
+                .FindAsync(Guid.Parse(inputModel.UserId));
+
+            string userDisplayName = user!.DisplayName;
+
+            Tuple<string, string> tuple = new Tuple<string, string>(comment.Content, userDisplayName);
+
+            return tuple;
         }
 
         public async Task EditAsync(PostFormViewModel model)

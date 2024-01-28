@@ -215,9 +215,9 @@
         {
             try
             {
-                Comment comment = await this.postService.AddCommentAsync(inputModel);
+                Tuple<string, string> tuple = await this.postService.AddCommentAsync(inputModel);
 
-                return Json(new { newComment = comment.Content, newCommentUserId = comment.UserId.ToString() });
+                return Json(new { newComment = tuple.Item1, newCommentUser = tuple.Item2 });
             }
             catch (ArgumentException ae)
             {
