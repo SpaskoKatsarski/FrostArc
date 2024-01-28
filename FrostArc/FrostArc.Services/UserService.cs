@@ -41,6 +41,7 @@
                 .ThenInclude(p => p.Community)
                 .Include(u => u.Posts)
                 .ThenInclude(p => p.Comments)
+                .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
@@ -91,6 +92,7 @@
                                 .Select(c => new CommentPostViewModel()
                                 {
                                     UserId = c.UserId.ToString(),
+                                    User = c.User.DisplayName,
                                     Content = c.Content
                                 }),
                     Community = post.Community.Name

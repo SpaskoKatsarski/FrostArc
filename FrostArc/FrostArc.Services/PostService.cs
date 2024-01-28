@@ -208,6 +208,7 @@
                 UserId = Guid.Parse(inputModel.UserId)
             };
 
+            await this.dbContext.Comments.AddAsync(comment);
             await this.dbContext.SaveChangesAsync();
 
             return comment;

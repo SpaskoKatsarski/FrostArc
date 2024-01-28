@@ -404,6 +404,7 @@
                         .Select(c => new CommentPostViewModel()
                         {
                             UserId = c.UserId.ToString(),
+                            User = c.User.DisplayName,
                             Content = c.Content
                         }),
                     Community = community.Name

@@ -86,8 +86,8 @@ else
                 <h6>Comments:</h6>
                 @foreach (var comment in post.Comments)
                 {
-                    <ul id="comments-@post.Id.ToString()">
-                        <li><strong>@comment.UserId:</strong> @comment.Content</li>
+                    <ul id="comments-@post.Id">
+                        <li><strong>@comment.User:</strong> @comment.Content</li>
                     </ul>
                 }
                 <a class="comment-btn btn btn-outline-secondary">Write a Comment</a>

@@ -3,7 +3,8 @@
 
     Array.from(commentBtns).forEach(function (btn) {
         btn.addEventListener('click', function () {
-            var commentSection = document.querySelector('.comment-section');
+            var postContainer = this.closest('.post');
+            var commentSection = postContainer.querySelector('.comment-section');
             if (commentSection.style.display === 'none' || commentSection.style.display === '') {
                 commentSection.style.display = 'block';
             } else {
@@ -34,8 +35,6 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             headers: { RequestVerificationToken: token },
             success: function (response) {
-                /*Move the alert away from here*/
-                alert("Comment posted successfully!");
                 var newCommentHtml = '<li><strong>' + response.newCommentUserId + ':</strong> ' + response.newComment + '</li>';
                 $('#comments-' + postId).append(newCommentHtml);
                 
