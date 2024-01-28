@@ -344,12 +344,35 @@
 
             community.Users.Remove(user);
             await this.RemovePostsForUserAsync(communityId, userId);
+            await this.RemoveCommentsForUserAsync(communityId, userId);
         }
 
         public async Task RemovePostsForUserAsync(string communityId, string userId)
         {
             ApplicationUser? user = await this.dbContext.Users
                 .Include(c => c.Posts)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User with the provided ID does not exist!");
+            }
+
+            foreach (var post in user.Posts.Where(p => p.CommunityId.ToString() == communityId))
+            {
+                post.IsDeleted = true;
+            }
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task RemoveCommentsForUserAsync(string communityId, string userId)
+        {
+            ApplicationUser? user = await this.dbContext.Users
+                .Include(u => u.Posts)
+                .ThenInclude(p => p.Community)
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.Post)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (user == null)
@@ -366,9 +389,9 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            foreach (var post in user.Posts.Where(p => p.CommunityId.ToString() == community.Id.ToString()))
+            foreach (var comment in user.Comments.Where(c => c.Post.CommunityId.ToString() == communityId))
             {
-                post.IsDeleted = true;
+                comment.IsDeleted = true;
             }
 
             await this.dbContext.SaveChangesAsync();
