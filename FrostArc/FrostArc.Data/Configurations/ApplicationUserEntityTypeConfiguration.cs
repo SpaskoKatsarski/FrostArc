@@ -29,7 +29,7 @@
             {
                 new ApplicationUser()
                 {
-                    Id = new Guid("3e6fad8c-8b75-45fa-b6ed-12027466320a"),
+                    Id = new Guid(DefaultUser.Id),
                     DisplayName = DefaultUser.DisplayName,
                     ProfilePicture = User.DefaultProfilePicture,
                     UserName = DefaultUser.Email,

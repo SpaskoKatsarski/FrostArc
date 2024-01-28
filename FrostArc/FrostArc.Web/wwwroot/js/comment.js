@@ -35,7 +35,8 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             headers: { RequestVerificationToken: token },
             success: function (response) {
-                var newCommentHtml = '<li><strong>' + response.newCommentUser + ':</strong> ' + response.newComment + '</li>';
+                var ownerPrefix = response.isOwner ? '🛠️ ' : '';
+                var newCommentHtml = '<li><strong>' + ownerPrefix + response.newCommentUser + ':</strong> ' + response.newComment + '</li>';
                 $('#comments-' + postId).append(newCommentHtml);
                 
                 $('.comment-field').val('');

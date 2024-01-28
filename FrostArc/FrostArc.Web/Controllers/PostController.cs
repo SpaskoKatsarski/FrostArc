@@ -215,9 +215,9 @@
         {
             try
             {
-                Tuple<string, string> tuple = await this.postService.AddCommentAsync(inputModel);
+                Tuple<string, string, bool> triple = await this.postService.AddCommentAsync(inputModel);
 
-                return Json(new { newComment = tuple.Item1, newCommentUser = tuple.Item2 });
+                return Json(new { newComment = triple.Item1, newCommentUser = triple.Item2, isOwner = triple.Item3 });
             }
             catch (ArgumentException ae)
             {

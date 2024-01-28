@@ -28,7 +28,7 @@
 
         Task<bool> HasDislikedAsync(string id, string userId);
 
-        Task<Tuple<string, string>> AddCommentAsync(CommentInputViewModel inputModel);
+        Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel);
 
         Task EditAsync(PostFormViewModel model);
 

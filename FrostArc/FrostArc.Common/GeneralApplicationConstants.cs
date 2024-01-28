@@ -4,6 +4,7 @@
     {
         public static class DefaultUser
         {
+            public const string Id = "3e6fad8c-8b75-45fa-b6ed-12027466320a";
             public const string Email = "spasko@abv.bg";
             public const string Password = "spasko123";
             public const string DisplayName = "SyncK";

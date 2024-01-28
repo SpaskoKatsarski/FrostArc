@@ -59,7 +59,14 @@ else
     {
         <div class="card mb-4 post">
             <div class="card-header">
-                <h5><a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" style="text-decoration: none;">@post.User</a>:</h5>
+                @if (await this.communityService.IsUserOwnerAsync(Model.Id, post.UserId))
+                {
+                    <h5><a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" style="text-decoration: none;">🛠️ @post.User</a>:</h5>
+                }
+                else
+                {
+                    <h5><a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" style="text-decoration: none;">@post.User</a>:</h5>
+                }
                 <h4 class="card-title">@post.Title</h4>
             </div>
             <div class="card-body">
@@ -87,7 +94,16 @@ else
                 @foreach (var comment in post.Comments)
                 {
                     <ul id="comments-@post.Id">
-                        <li><strong>@comment.User:</strong> @comment.Content</li>
+                        <li>
+                            @if (await this.communityService.IsUserOwnerAsync(Model.Id, comment.UserId))
+                            {
+                                <strong>🛠️ @comment.User:</strong> @comment.Content
+                            }
+                            else
+                            {
+                                <strong>@comment.User:</strong> @comment.Content
+                            }
+                        </li>
                     </ul>
                 }
                 <a class="comment-btn btn btn-outline-secondary">Write a Comment</a>

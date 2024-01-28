@@ -189,10 +189,11 @@
             return tuple;
         }
 
-        public async Task<Tuple<string, string>> AddCommentAsync(CommentInputViewModel inputModel)
+        public async Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel)
         {
             Post? post = await this.dbContext.Posts
                 .Include(p => p.Comments)
+                .Include(p => p.Community)
                 .Where(p => !p.IsDeleted)
                 .FirstOrDefaultAsync(p => p.Id.ToString() == inputModel.PostId);
 
@@ -215,10 +216,11 @@
                 .FindAsync(Guid.Parse(inputModel.UserId));
 
             string userDisplayName = user!.DisplayName;
+            bool isUserOwner = post.Community.OwnerId.ToString() == user.Id.ToString();
 
-            Tuple<string, string> tuple = new Tuple<string, string>(comment.Content, userDisplayName);
+            Tuple<string, string, bool> triple = new Tuple<string, string, bool>(comment.Content, userDisplayName, isUserOwner);
 
-            return tuple;
+            return triple;
         }
 
         public async Task EditAsync(PostFormViewModel model)
