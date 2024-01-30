@@ -1,6 +1,7 @@
 ﻿@using FrostArc.Services.Contracts;
 @model CommunityFeedViewModel;
 @inject ICommunityService communityService;
+@inject ICommentService commentService;
 
 @{
     string userId = User.GetId()!;
@@ -70,11 +71,11 @@ else
                 <h4 class="card-title">@post.Title</h4>
             </div>
             <div class="card-body">
+                <p class="card-text">@post.Content</p>
                 @if (!string.IsNullOrEmpty(post.ImageUrl))
                 {
                     <img src="@post.ImageUrl" class="card-img-top mb-3" alt="Post Image">
                 }
-                <p class="card-text">@post.Content</p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <a data-post-id="@post.Id" data-user-id="@userId" class="btn btn-primary like-btn">👍 @post.Likes</a>
@@ -91,10 +92,10 @@ else
             }
             <div class="card-footer">
                 <h6>Comments:</h6>
-                @foreach (var comment in post.Comments)
-                {
-                    <ul id="comments-@post.Id">
-                        <li>
+                <ul id="comments-@post.Id">
+                    @foreach (var comment in post.Comments)
+                    {
+                        <li class="mt-3">
                             @if (await this.communityService.IsUserOwnerAsync(Model.Id, comment.UserId))
                             {
                                 <strong>🛠️ @comment.User:</strong> @comment.Content
@@ -103,9 +104,18 @@ else
                             {
                                 <strong>@comment.User:</strong> @comment.Content
                             }
+
+                            @if (await this.commentService.IsUserCreatorOfCommentAsync(comment.UserId, comment.Id))
+                            {
+                                <a href="javascript:void(0);" class="settings-toggle" data-target="dropdown-menu-@comment.Id" style="text-decoration: none;">⚙️</a>
+                                <div class="dropdown-menu" id="dropdown-menu-@comment.Id">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">✏️ Edit</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">🗑️ Delete</a>
+                                </div>
+                            }
                         </li>
-                    </ul>
-                }
+                    }
+                </ul>
                 <a class="comment-btn btn btn-outline-secondary">Write a Comment</a>
                 <div class="comment-section mt-3" style="display:none">
                     <textarea class="active comment-field" rows="5" cols="70" placeholder="What are your thoughts?"></textarea>

@@ -90,6 +90,7 @@
                                 .Where(c => !c.IsDeleted)
                                 .Select(c => new CommentPostViewModel()
                                 {
+                                    Id = c.Id.ToString(),
                                     UserId = c.UserId.ToString(),
                                     User = c.User.DisplayName,
                                     Content = c.Content

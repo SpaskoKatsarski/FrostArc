@@ -209,20 +209,5 @@
                 return BadRequest(e.Message);
             }
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Comment([FromBody]CommentInputViewModel inputModel)
-        {
-            try
-            {
-                Tuple<string, string, bool> triple = await this.postService.AddCommentAsync(inputModel);
-
-                return Json(new { newComment = triple.Item1, newCommentUser = triple.Item2, isOwner = triple.Item3 });
-            }
-            catch (ArgumentException ae)
-            {
-                return BadRequest(ae.Message);
-            }
-        }
     }
 }

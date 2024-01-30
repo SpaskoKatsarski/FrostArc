@@ -6,7 +6,6 @@
     using FrostArc.Data.Models;
     using FrostArc.Services.Contracts;
     using FrostArc.Web.ViewModels.Post;
-    using FrostArc.Web.ViewModels.Comment;
 
     public class PostService : IPostService
     {
@@ -187,40 +186,6 @@
             Tuple<int, int> tuple = new Tuple<int, int>(post.Likes, post.Dislikes);
 
             return tuple;
-        }
-
-        public async Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel)
-        {
-            Post? post = await this.dbContext.Posts
-                .Include(p => p.Comments)
-                .Include(p => p.Community)
-                .Where(p => !p.IsDeleted)
-                .FirstOrDefaultAsync(p => p.Id.ToString() == inputModel.PostId);
-
-            if (post == null)
-            {
-                throw new ArgumentException("Post with the provided ID does not exist!");
-            }
-
-            Comment comment = new Comment()
-            {
-                Content = inputModel.Content,
-                PostId = Guid.Parse(inputModel.PostId),
-                UserId = Guid.Parse(inputModel.UserId)
-            };
-
-            await this.dbContext.Comments.AddAsync(comment);
-            await this.dbContext.SaveChangesAsync();
-
-            ApplicationUser user = await this.dbContext.Users
-                .FindAsync(Guid.Parse(inputModel.UserId));
-
-            string userDisplayName = user!.DisplayName;
-            bool isUserOwner = post.Community.OwnerId.ToString() == user.Id.ToString();
-
-            Tuple<string, string, bool> triple = new Tuple<string, string, bool>(comment.Content, userDisplayName, isUserOwner);
-
-            return triple;
         }
 
         public async Task EditAsync(PostFormViewModel model)

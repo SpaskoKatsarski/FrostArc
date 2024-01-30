@@ -29,14 +29,14 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: '/Post/Comment',
+            url: '/Comment/Comment',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
             headers: { RequestVerificationToken: token },
             success: function (response) {
                 var ownerPrefix = response.isOwner ? '🛠️ ' : '';
-                var newCommentHtml = '<li><strong>' + ownerPrefix + response.newCommentUser + ':</strong> ' + response.newComment + '</li>';
+                var newCommentHtml = '<li style="margin-top: 16px;"><strong>' + ownerPrefix + response.newCommentUser + ':</strong> ' + response.newComment + '</li>';
                 $('#comments-' + postId).append(newCommentHtml);
                 
                 $('.comment-field').val('');
@@ -44,6 +44,29 @@ $(document).ready(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error occurred: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.settings-toggle').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            var targetId = this.getAttribute('data-target');
+            var dropdown = document.getElementById(targetId);
+            
+            dropdown.classList.toggle('show');
+            
+            e.stopPropagation();
+        });
+    });
+    
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu.classList.contains('show')) {
+                menu.classList.remove('show');
             }
         });
     });

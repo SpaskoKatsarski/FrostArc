@@ -1,7 +1,6 @@
 ﻿namespace FrostArc.Services.Contracts
 {
     using FrostArc.Data.Models;
-    using FrostArc.Web.ViewModels.Comment;
     using FrostArc.Web.ViewModels.Post;
 
     public interface IPostService
@@ -27,8 +26,6 @@
         Task<bool> HasLikedAsync(string id, string userId);
 
         Task<bool> HasDislikedAsync(string id, string userId);
-
-        Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel);
 
         Task EditAsync(PostFormViewModel model);
 

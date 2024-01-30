@@ -46,6 +46,7 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<ICommunityService, CommunityService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IPlatformService, PlatformService>();
 
 WebApplication app = builder.Build();
