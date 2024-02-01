@@ -12,6 +12,7 @@
 
         [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
+        [Display(Name = "Comment")]
         public string Content { get; set; } = null!;
 
         [Display(Name = "Title of Post")]

@@ -5,7 +5,6 @@
 
     using FrostArc.Web.ViewModels.Comment;
     using FrostArc.Services.Contracts;
-    using FrostArc.Web.ViewModels.Post;
     using FrostArc.Web.Infrastructire.Extensions;
 
     [Authorize]
@@ -69,9 +68,56 @@
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }
 
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
                 await this.commentService.EditAsync(model);
 
                 string communityId = await this.commentService.GetCommunityIdByCommentAsync(model.Id);
+                return RedirectToAction("Feed", "Community", new { id = communityId });
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return Forbid(ioe.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                CommentDeleteViewModel model = await this.commentService.GetForDeleteAsync(id);
+
+                return View(model);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CommentDeleteViewModel model)
+        {
+            try
+            {
+                string userId = this.User.GetId()!;
+
+                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, model.Id))
+                {
+                    throw new InvalidOperationException("User is not creator of the comment!");
+                }
+
+                string communityId = await this.commentService.GetCommunityIdByCommentAsync(model.Id);
+                await this.commentService.RemoveAsync(model);
+
                 return RedirectToAction("Feed", "Community", new { id = communityId });
             }
             catch (ArgumentException ae)

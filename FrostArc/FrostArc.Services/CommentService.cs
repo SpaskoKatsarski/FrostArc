@@ -117,5 +117,43 @@
 
             return comment.Post.CommunityId.ToString();
         }
+
+        public async Task<CommentDeleteViewModel> GetForDeleteAsync(string id)
+        {
+            Comment? comment = await this.dbContext.Comments
+                .Include(c => c.User)
+                .Include(c => c.Post)
+                .ThenInclude(p => p.User)
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (comment == null)
+            {
+                throw new ArgumentException("Comment with the provided ID does not exist!");
+            }
+
+            return new CommentDeleteViewModel()
+            {
+                Id = comment.Id.ToString(),
+                Content = comment.Content,
+                PostTitle = comment.Post.Title,
+                PostOwner = comment.Post.User.DisplayName
+            };
+        }
+
+        public async Task RemoveAsync(CommentDeleteViewModel model)
+        {
+            Comment? comment = await this.dbContext.Comments
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == model.Id);
+
+            if (comment == null)
+            {
+                throw new ArgumentException("Comment with the provided ID does not exist!");
+            }
+
+            comment.IsDeleted = true;
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

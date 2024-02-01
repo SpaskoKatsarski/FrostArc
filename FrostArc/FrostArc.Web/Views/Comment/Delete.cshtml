@@ -4,26 +4,24 @@
     ViewBag.Title = "Delete Post";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title (from @Model.PostOwner's post)</h2>
 <hr />
 
-@* <form method="post" asp-controller="Post" asp-action="Delete">
+<form method="post" asp-controller="Comment" asp-action="Delete">
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" disabled="disabled" />
+                <label asp-for="PostTitle" class="control-label"></label>
+                <input asp-for="PostTitle" class="form-control" disabled="disabled" />
             </div>
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 <input asp-for="Content" class="form-control" disabled="disabled" />
             </div>
             <input asp-for="Id" type="hidden" />
-            <input asp-for="UserId" type="hidden" />
-            <input asp-for="CommunityId" type="hidden" />
             <div class="form-group mt-2">
                 <input type="submit" value="Delete" class="btn btn-danger" />
             </div>
         </div>
     </div>
-</form> *@
+</form>
