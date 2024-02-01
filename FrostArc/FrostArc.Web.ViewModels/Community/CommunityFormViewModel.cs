@@ -1,22 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FrostArc.Web.ViewModels.Community
+﻿namespace FrostArc.Web.ViewModels.Community
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using static Common.DataValidationConstants.Community;
+
     public class CommunityFormViewModel
     {
         public string? Id { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 2)]
+        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string Name { get; set; } = null!;
 
         [Required]
-        [StringLength(1000, MinimumLength = 10)]
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; set; } = null!;
 
         [Required]
         [Url]
-        [MaxLength(2048)]
+        [StringLength(ImageUrlMaxLength, MinimumLength = ImageUrlMinLength)]
         [Display(Name = "Image URL")]
         public string ImageUrl { get; set; } = null!;
     }

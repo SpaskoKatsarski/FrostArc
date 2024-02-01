@@ -5,6 +5,8 @@
 
     using FrostArc.Web.ViewModels.Comment;
     using FrostArc.Services.Contracts;
+    using FrostArc.Web.ViewModels.Post;
+    using FrostArc.Web.Infrastructire.Extensions;
 
     [Authorize]
     public class CommentController : Controller
@@ -36,12 +38,12 @@
         {
             try
             {
-                if (await this.commentService.IsUserCreatorOfCommentAsync(userId, id))
+                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, id))
                 {
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }
 
-                CommentFormViewModel model = await this.commentService.GetForEditAsync(id);
+                CommentEditViewModel model = await this.commentService.GetForEditAsync(id);
 
                 return View(model);
             }
@@ -52,6 +54,33 @@
             catch (ArgumentException ae)
             {
                 return BadRequest(ae.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CommentEditViewModel model)
+        {
+            try
+            {
+                string userId = this.User.GetId()!;
+
+                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, model.Id))
+                {
+                    throw new InvalidOperationException("User is not creator of the comment!");
+                }
+
+                await this.commentService.EditAsync(model);
+
+                string communityId = await this.commentService.GetCommunityIdByCommentAsync(model.Id);
+                return RedirectToAction("Feed", "Community", new { id = communityId });
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return Forbid(ioe.Message);
             }
         }
     }

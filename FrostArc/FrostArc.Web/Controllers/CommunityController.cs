@@ -142,7 +142,7 @@
 
                 if (!isMember && !isOwner)
                 {
-                    return BadRequest("You have to join this community in order to access its feed.");
+                    return RedirectToAction("Details", "Community", new { id });
                 }
 
                 CommunityFeedViewModel model = await this.communityService.GetForFeedAsync(id);

@@ -13,15 +13,19 @@ namespace FrostArc.Common
 
         public static class Comment
         {
+            public const int ContentMinLength = 1;
             public const int ContentMaxLength = 1500;
         }
 
         public static class Community
         {
+            public const int NameMinLength = 3;
             public const int NameMaxLength = 25;
 
+            public const int DescriptionMinLength = 10;
             public const int DescriptionMaxLength = 2000;
 
+            public const int ImageUrlMinLength = 10;
             public const int ImageUrlMaxLength = 2048;
         }
 
@@ -64,11 +68,9 @@ namespace FrostArc.Common
             public const int ImageUrlMaxLength = 2048;
 
             public const double LikesMaxValue = double.MaxValue;
-
             public const double LikesMinValue = 0;
 
             public const double DislikesMaxValue = double.MaxValue;
-
             public const double DislikesMinValue = 0;
         }
     }

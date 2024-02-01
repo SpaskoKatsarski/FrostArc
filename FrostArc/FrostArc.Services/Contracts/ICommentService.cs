@@ -6,8 +6,12 @@
     {
         Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel);
 
-        Task<CommentFormViewModel> GetForEditAsync(string id);
+        Task<CommentEditViewModel> GetForEditAsync(string id);
 
         Task<bool> IsUserCreatorOfCommentAsync(string userId, string commendId);
+
+        Task EditAsync(CommentEditViewModel model);
+
+        Task<string> GetCommunityIdByCommentAsync(string commentId);
     }
 }

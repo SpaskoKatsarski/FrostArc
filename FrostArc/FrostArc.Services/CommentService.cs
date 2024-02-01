@@ -64,10 +64,12 @@
             return comment.UserId.ToString() == userId;
         }
 
-        public async Task<CommentFormViewModel> GetForEditAsync(string id)
+        public async Task<CommentEditViewModel> GetForEditAsync(string id)
         {
             Comment? comment = await this.dbContext.Comments
                 .Include(c => c.User)
+                .Include(c => c.Post)
+                .ThenInclude(p => p.User)
                 .Where(c => !c.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
@@ -76,12 +78,44 @@
                 throw new ArgumentException("Comment with the provided ID does not exist!");
             }
 
-            return new CommentFormViewModel()
+            return new CommentEditViewModel()
             {
                 Id = comment.Id.ToString(),
                 User = comment.User.DisplayName,
-                Content = comment.Content
+                Content = comment.Content,
+                PostTitle = comment.Post.Title,
+                PostOwner = comment.Post.User.DisplayName
             };
+        }
+
+        public async Task EditAsync(CommentEditViewModel model)
+        {
+            Comment? comment = await this.dbContext.Comments
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == model.Id);
+
+            if (comment == null)
+            {
+                throw new ArgumentException("Comment with the provided ID does not exist!");
+            }
+
+            comment.Content = model.Content;
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<string> GetCommunityIdByCommentAsync(string commentId)
+        {
+            Comment? comment = await this.dbContext.Comments
+                .Include(c => c.Post)
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == commentId);
+
+            if (comment == null)
+            {
+                throw new ArgumentException("Comment with the provided ID does not exist!");
+            }
+
+            return comment.Post.CommunityId.ToString();
         }
     }
 }

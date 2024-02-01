@@ -96,6 +96,15 @@ else
                     @foreach (var comment in post.Comments)
                     {
                         <li class="mt-3">
+                            @if (await this.commentService.IsUserCreatorOfCommentAsync(userId, comment.Id))
+                            {
+                                <a href="javascript:void(0);" class="settings-toggle" data-target="dropdown-menu-@comment.Id" style="text-decoration: none;">⚙️</a>
+                                <div class="dropdown-menu" id="dropdown-menu-@comment.Id">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">✏️ Edit</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">🗑️ Delete</a>
+                                </div>
+                            }
+
                             @if (await this.communityService.IsUserOwnerAsync(Model.Id, comment.UserId))
                             {
                                 <strong>🛠️ @comment.User:</strong> @comment.Content
@@ -103,15 +112,6 @@ else
                             else
                             {
                                 <strong>@comment.User:</strong> @comment.Content
-                            }
-
-                            @if (await this.commentService.IsUserCreatorOfCommentAsync(comment.UserId, comment.Id))
-                            {
-                                <a href="javascript:void(0);" class="settings-toggle" data-target="dropdown-menu-@comment.Id" style="text-decoration: none;">⚙️</a>
-                                <div class="dropdown-menu" id="dropdown-menu-@comment.Id">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">✏️ Edit</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">🗑️ Delete</a>
-                                </div>
                             }
                         </li>
                     }

@@ -1,0 +1,22 @@
+﻿@model CommentEditViewModel
+
+@{
+    ViewBag.Title = "Edit Comment";
+}
+
+<h2 class="text-center">@ViewBag.Title (on @Model.PostOwner's post)</h2>
+<hr />
+
+<form asp-area="" asp-controller="Comment" asp-action="Edit" method="post" class="mt-4">
+    
+    <div class="form-group">
+        <label asp-for="PostTitle" class="control-label"></label>
+        <input asp-for="PostTitle" class="form-control" disabled="disabled" />
+    </div>
+    <partial name="_CommentFormPartial" model="@Model" />
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
