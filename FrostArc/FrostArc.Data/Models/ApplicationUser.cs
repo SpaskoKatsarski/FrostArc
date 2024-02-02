@@ -14,6 +14,7 @@
             this.Id = Guid.NewGuid();
             this.Comments = new HashSet<Comment>();
             this.Communities = new HashSet<Community>();
+            this.OwnedCommunities = new HashSet<Community>();
             this.Posts = new HashSet<Post>();
             this.PostReactions = new HashSet<PostReaction>();
         }

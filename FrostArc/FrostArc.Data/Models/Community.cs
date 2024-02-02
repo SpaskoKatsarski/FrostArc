@@ -36,10 +36,10 @@
         [Required]
         public ApplicationUser Owner { get; set; } = null!;
 
-        public bool IsDeleted { get; set; }
-
         public ICollection<Post> Posts { get; set; }
 
         public ICollection<ApplicationUser> Users { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
