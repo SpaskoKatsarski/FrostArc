@@ -472,5 +472,14 @@
 
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsAsync(string communityId)
+        {
+            Community? community = await this.dbContext.Communities
+                .Where(c => !c.IsDeleted)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == communityId);
+
+            return community != null;
+        }
     }
 }

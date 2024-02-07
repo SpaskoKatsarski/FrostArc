@@ -1,6 +1,7 @@
 ﻿@model CommunityUsersViewModel
 @using FrostArc.Services.Contracts;
 @inject ICommunityService communityService;
+@inject IModeratorService moderatorService;
 
 @{
     string currentUserId = User.GetId()!;
@@ -29,6 +30,14 @@
                 @if (isUserOwner && member.Id != currentUserId)
                 {
                     <a class="btn btn-danger m-lg-3" asp-controller="Community" asp-action="Kick" asp-route-userId="@member.Id" asp-route-communityId="@Model.Id">Kick</a>
+                    if (await this.moderatorService.IsModeratorAsync(member.Id, Model.Id))
+                    {
+                        <a class="btn btn-danger m-lg-1" asp-controller="Community" asp-action="Demote" asp-route-userId="@member.Id" asp-route-communityId="@Model.Id">Demote</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-success m-lg-1" asp-controller="Community" asp-action="Promote" asp-route-userId="@member.Id" asp-route-communityId="@Model.Id">Promote</a>
+                    }
                 }
             </div>
         }

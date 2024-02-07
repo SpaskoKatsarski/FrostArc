@@ -5,12 +5,12 @@
     public class ModeratorCommunity
     {
         [ForeignKey(nameof(Moderator))]
-        public string ModeratorId { get; set; } = null!;
+        public Guid ModeratorId { get; set; }
 
         public ApplicationUser Moderator { get; set; } = null!;
 
         [ForeignKey(nameof(Community))]
-        public string CommunityId { get; set; } = null!;
+        public Guid CommunityId { get; set; }
 
         public Community Community { get; set; } = null!;
     }

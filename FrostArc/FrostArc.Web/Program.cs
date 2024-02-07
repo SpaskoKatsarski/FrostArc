@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using FrostArc.Data;
 using FrostArc.Services.Contracts;
-using FrostArc.Services;
 using FrostArc.Data.Models;
+using FrostArc.Web.Infrastructire.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -40,14 +40,8 @@ builder.Services
         options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
     });
 
-builder.Services.AddScoped<IGameService, GameService>();
-builder.Services.AddScoped<IDeveloperService, DeveloperService>();
-builder.Services.AddScoped<IGenreService, GenreService>();
-builder.Services.AddScoped<ICommunityService, CommunityService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<ICommentService, CommentService>();
-builder.Services.AddScoped<IPlatformService, PlatformService>();
+// Registering application services with extension method
+builder.Services.RegisterApplicationServices(typeof(IGameService));
 
 WebApplication app = builder.Build();
 

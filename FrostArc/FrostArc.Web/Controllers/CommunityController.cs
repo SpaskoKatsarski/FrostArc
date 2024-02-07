@@ -12,10 +12,13 @@
     public class CommunityController : Controller
     {
         private ICommunityService communityService;
+        private IModeratorService moderatorService;
 
-        public CommunityController(ICommunityService communityService)
+        public CommunityController(ICommunityService communityService, IModeratorService moderatorService)
         {
             this.communityService = communityService;
+            this.moderatorService = moderatorService;
+
         }
 
         [HttpGet]
@@ -126,7 +129,7 @@
             }
             catch (ArgumentException ae)
             {
-                return BadRequest(ae.Message);
+                return RedirectToAction("Details", "Community", new { id });
             }
 
             return RedirectToAction("Feed", new { id });
@@ -188,6 +191,36 @@
             }
 
             return RedirectToAction("Members", new { communityId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Promote(string userId, string communityId)
+        {
+            try
+            {
+                await this.moderatorService.PromoteAsync(userId, communityId);
+            }
+            catch (ArgumentException ae)
+            {
+                //TempData[ErrorMessage] = ae.Message;
+            }
+
+            return RedirectToAction("Members", "Community", new { communityId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Demote(string userId, string communityId)
+        {
+            try
+            {
+                await this.moderatorService.DemoteAsync(userId, communityId);
+            }
+            catch (ArgumentException ae)
+            {
+                //TempData[ErrorMessage] = ae.Message;
+            }
+
+            return RedirectToAction("Members", "Community", new { communityId });
         }
 
         [HttpGet]

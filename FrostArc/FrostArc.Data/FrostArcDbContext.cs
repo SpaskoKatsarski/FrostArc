@@ -31,6 +31,8 @@
 
         public DbSet<PostReaction> PostsReactions { get; set; }
 
+        public DbSet<ModeratorCommunity> ModeratorsCommunities { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(GameEntityTypeConfiguration).Assembly);

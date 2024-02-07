@@ -45,5 +45,7 @@
         Task RemovePostsForUserAsync(string communityId, string userId);
 
         Task<IEnumerable<PostAllViewModel>> GetPostsForCommunityAsync(string communityId);
+
+        Task<bool> ExistsAsync(string communityId);
     }
 }

@@ -9,7 +9,8 @@
     {
         public void Configure(EntityTypeBuilder<ModeratorCommunity> builder)
         {
-            //TODO: Configure relationship
+            builder
+                .HasKey(mc => new { mc.ModeratorId, mc.CommunityId });
         }
     }
 }
