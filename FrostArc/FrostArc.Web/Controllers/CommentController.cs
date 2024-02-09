@@ -33,16 +33,18 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string id, string userId)
+        public async Task<IActionResult> Edit(string id, string userId, bool isUserOwnerOrMod)
         {
             try
             {
-                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, id))
+                bool isUserCreator = await this.commentService.IsUserCreatorOfCommentAsync(userId, id);
+
+                if (!isUserCreator && !isUserOwnerOrMod)
                 {
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }
 
-                CommentEditViewModel model = await this.commentService.GetForEditAsync(id);
+                CommentEditViewModel model = await this.commentService.GetForEditAsync(id, userId, isUserOwnerOrMod);
 
                 return View(model);
             }
@@ -63,7 +65,7 @@
             {
                 string userId = this.User.GetId()!;
 
-                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, model.Id))
+                if (!model.HasAccess)
                 {
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }

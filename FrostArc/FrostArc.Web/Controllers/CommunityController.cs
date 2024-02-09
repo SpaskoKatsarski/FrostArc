@@ -81,10 +81,12 @@
         {
             string userId = this.User.GetId()!;
             bool isUserOwner = await this.communityService.IsUserOwnerAsync(communityId, userId);
+            bool isUserMod = await this.moderatorService.IsModeratorAsync(userId, communityId);
 
-            if (!isUserOwner)
+            if (!isUserOwner && !isUserMod)
             {
-                return Forbid();
+                // TempData[ErrorMessage] = "Editing community requires user to be owner or moderator!"
+                return RedirectToAction("Details", "Community", new { id = communityId });
             }
 
             try

@@ -12,6 +12,7 @@
     <div class="form-group">
         <label asp-for="PostTitle" class="control-label"></label>
         <input asp-for="PostTitle" class="form-control" disabled="disabled" />
+        <input asp-for="HasAccess" type="hidden"/>
     </div>
     <partial name="_CommentFormPartial" model="@Model" />
 </form>

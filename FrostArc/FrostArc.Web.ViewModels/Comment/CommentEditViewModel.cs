@@ -1,5 +1,6 @@
 ﻿namespace FrostArc.Web.ViewModels.Comment
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     using static Common.DataValidationConstants.Comment;
@@ -19,5 +20,8 @@
         public string PostTitle { get; set; } = null!;
 
         public string PostOwner { get; set; } = null!;
+
+        [Description("Indicates if the user has rights to edit or delete the comment.")]
+        public bool HasAccess { get; set; }
     }
 }

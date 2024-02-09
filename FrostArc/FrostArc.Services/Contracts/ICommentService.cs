@@ -6,7 +6,7 @@
     {
         Task<Tuple<string, string, bool>> AddCommentAsync(CommentInputViewModel inputModel);
 
-        Task<CommentEditViewModel> GetForEditAsync(string id);
+        Task<CommentEditViewModel> GetForEditAsync(string id, string userId, bool isUserOwnerOrMod);
 
         Task<CommentDeleteViewModel> GetForDeleteAsync(string id);
 

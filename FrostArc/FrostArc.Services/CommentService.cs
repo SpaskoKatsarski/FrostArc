@@ -64,7 +64,7 @@
             return comment.UserId.ToString() == userId;
         }
 
-        public async Task<CommentEditViewModel> GetForEditAsync(string id)
+        public async Task<CommentEditViewModel> GetForEditAsync(string id, string userId, bool isUserOwnerOrMod)
         {
             Comment? comment = await this.dbContext.Comments
                 .Include(c => c.User)
@@ -84,7 +84,8 @@
                 User = comment.User.DisplayName,
                 Content = comment.Content,
                 PostTitle = comment.Post.Title,
-                PostOwner = comment.Post.User.DisplayName
+                PostOwner = comment.Post.User.DisplayName,
+                HasAccess = isUserOwnerOrMod || await this.IsUserCreatorOfCommentAsync(userId, id)
             };
         }
 

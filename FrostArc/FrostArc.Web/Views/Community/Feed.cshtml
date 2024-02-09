@@ -2,10 +2,12 @@
 @model CommunityFeedViewModel;
 @inject ICommunityService communityService;
 @inject ICommentService commentService;
+@inject IModeratorService moderatorService;
 
 @{
     string userId = User.GetId()!;
     bool isUserOwner = await this.communityService.IsUserOwnerAsync(Model.Id, userId);
+    bool isUserMod = await this.moderatorService.IsModeratorAsync(userId, Model.Id);
 }
 
 @Html.AntiForgeryToken()
@@ -19,11 +21,12 @@
 
 <p>Members: @Model.MembersCount</p>
 
-@if (isUserOwner)
+@if (isUserOwner || isUserMod)
 {
     <a asp-controller="Community" asp-action="Edit" asp-route-communityId="@Model.Id" class="btn btn-warning">Edit</a>
 }
-else
+
+@if (!isUserOwner)
 {
     <a asp-controller="Community" asp-action="Leave" asp-route-userId="@userId" asp-route-communityId="@Model.Id" class="btn btn-danger">Leave</a>
 }
@@ -60,7 +63,11 @@ else
     {
         <div class="card mb-4 post">
             <div class="card-header">
-                @if (await this.communityService.IsUserOwnerAsync(Model.Id, post.UserId))
+                @{
+                    bool isPostCreatorOwner = await this.communityService.IsUserOwnerAsync(Model.Id, post.UserId);
+                    bool isPostCreatorMod = await this.moderatorService.IsModeratorAsync(post.UserId, Model.Id);
+                }
+                @if (isPostCreatorOwner || isPostCreatorMod)
                 {
                     <h5><a asp-controller="User" asp-action="Details" asp-route-id="@post.UserId" style="text-decoration: none;">🛠️ @post.User</a>:</h5>
                 }
@@ -96,16 +103,19 @@ else
                     @foreach (var comment in post.Comments)
                     {
                         <li class="mt-3">
-                            @if (await this.commentService.IsUserCreatorOfCommentAsync(userId, comment.Id))
+                            @if (await this.commentService.IsUserCreatorOfCommentAsync(userId, comment.Id) || isUserOwner || isUserOwner)
                             {
                                 <a href="javascript:void(0);" class="settings-toggle" data-target="dropdown-menu-@comment.Id" style="text-decoration: none;">⚙️</a>
                                 <div class="dropdown-menu" id="dropdown-menu-@comment.Id">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">✏️ Edit</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId">🗑️ Delete</a>
+                                    @{
+                                        bool hasAccess = isUserOwner || isUserMod;
+                                    }
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId" asp-route-isUserOwnerOrMod="@hasAccess">✏️ Edit</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId" asp-route-isUserOwnerOrMod="@hasAccess">🗑️ Delete</a>
                                 </div>
                             }
 
-                            @if (await this.communityService.IsUserOwnerAsync(Model.Id, comment.UserId))
+                            @if (await this.communityService.IsUserOwnerAsync(Model.Id, comment.UserId) || await this.moderatorService.IsModeratorAsync(comment.UserId, Model.Id))
                             {
                                 <strong>🛠️ @comment.User:</strong> @comment.Content
                             }
