@@ -9,7 +9,7 @@
     {
         public string Id { get; set; } = null!;
 
-        public string User { get; set; } = null!;
+        public string? User { get; set; }
 
         [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
@@ -17,9 +17,9 @@
         public string Content { get; set; } = null!;
 
         [Display(Name = "Title of Post")]
-        public string PostTitle { get; set; } = null!;
+        public string? PostTitle { get; set; }
 
-        public string PostOwner { get; set; } = null!;
+        public string? PostOwner { get; set; }
 
         [Description("Indicates if the user has rights to edit or delete the comment.")]
         public bool HasAccess { get; set; }
