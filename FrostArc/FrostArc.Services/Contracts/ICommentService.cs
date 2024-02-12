@@ -8,7 +8,7 @@
 
         Task<CommentEditViewModel> GetForEditAsync(string id, string userId, bool isUserOwnerOrMod);
 
-        Task<CommentDeleteViewModel> GetForDeleteAsync(string id);
+        Task<CommentDeleteViewModel> GetForDeleteAsync(string id, string userId, bool isUserOwnerOrMod);
 
         Task<bool> IsUserCreatorOfCommentAsync(string userId, string commendId);
 

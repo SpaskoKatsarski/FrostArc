@@ -41,6 +41,7 @@
 
                 if (!isUserCreator && !isUserOwnerOrMod)
                 {
+                    //TempData[ErrorMessage] = "";
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }
 
@@ -67,7 +68,7 @@
 
                 if (!model.HasAccess)
                 {
-                    throw new InvalidOperationException("User is not creator of the comment!");
+                    throw new InvalidOperationException("User cannot modify the comment!");
                 }
 
                 if (!ModelState.IsValid)
@@ -91,11 +92,19 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id, string userId, bool isUserOwnerOrMod)
         {
             try
             {
-                CommentDeleteViewModel model = await this.commentService.GetForDeleteAsync(id);
+                bool isUserCreator = await this.commentService.IsUserCreatorOfCommentAsync(userId, id);
+
+                if (!isUserCreator && !isUserOwnerOrMod)
+                {
+                    //TempData[ErrorMessage] = "";
+                    throw new InvalidOperationException("User is not creator of the comment!");
+                }
+
+                CommentDeleteViewModel model = await this.commentService.GetForDeleteAsync(id, userId, isUserOwnerOrMod);
 
                 return View(model);
             }
@@ -112,8 +121,9 @@
             {
                 string userId = this.User.GetId()!;
 
-                if (!await this.commentService.IsUserCreatorOfCommentAsync(userId, model.Id))
+                if (!model.HasAccess)
                 {
+                    //TempData[ErrorMessage] = "";
                     throw new InvalidOperationException("User is not creator of the comment!");
                 }
 

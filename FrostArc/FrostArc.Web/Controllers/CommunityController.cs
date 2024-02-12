@@ -180,12 +180,19 @@
         {
             if (!await this.communityService.IsUserOwnerAsync(communityId, User.GetId()!))
             {
+                // TempData
                 return Forbid();
             }
 
             try
             {
                 await this.communityService.RemoveUserFromCommunityAsync(communityId, userId);
+                bool isMod = await this.moderatorService.IsModeratorAsync(userId, communityId);
+
+                if (isMod)
+                {
+                    await this.moderatorService.DemoteAsync(userId, communityId);
+                }
             }
             catch (ArgumentException ae)
             {
@@ -234,6 +241,7 @@
             if (isMember && !isOwner)
             {
                 await this.communityService.RemoveUserFromCommunityAsync(communityId, userId);
+                await this.moderatorService.DemoteAsync(userId, communityId);
             }
 
             return RedirectToAction("Details", "Community", new { id = communityId });

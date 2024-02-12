@@ -13,5 +13,7 @@
         public string PostTitle { get; set; } = null!;
 
         public string PostOwner { get; set; } = null!;
+
+        public bool HasAccess { get; set; }
     }
 }
