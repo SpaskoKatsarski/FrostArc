@@ -192,7 +192,7 @@
         {
             Post? post = await this.dbContext.Posts
                 .Where(p => !p.IsDeleted)
-                .FirstOrDefaultAsync(p => p.Id.ToString() == model.PostId);
+                .FirstOrDefaultAsync(p => p.Id.ToString() == model.Id);
 
             if (post == null)
             {
@@ -219,6 +219,7 @@
 
             return new PostFormViewModel()
             {
+                Id = post.Id.ToString(),
                 Title = post.Title,
                 Content = post.Content,
                 ImageUrl = post.ImageUrl,
@@ -275,7 +276,6 @@
             }
 
             post.IsDeleted = true;
-
             await this.dbContext.SaveChangesAsync();
         }
     }

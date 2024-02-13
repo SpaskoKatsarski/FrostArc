@@ -8,15 +8,20 @@
     using FrostArc.Web.Infrastructire.Extensions;
     using FrostArc.Data.Models;
     using FrostArc.Web.ViewModels.Comment;
+    using static FrostArc.Common.DataValidationConstants;
 
     [Authorize]
     public class PostController : Controller
     {
         private IPostService postService;
+        private IModeratorService moderatorService;
+        private ICommunityService communityService;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, IModeratorService moderatorService, ICommunityService communityService)
         {
             this.postService = postService;
+            this.moderatorService = moderatorService;
+            this.communityService = communityService;
         }
 
         [HttpGet]
@@ -45,14 +50,29 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string postId)
+        public async Task<IActionResult> Edit(string postId, string? communityId)
         {
             try
             {
-                bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, User.GetId()!);
+                string userId = User.GetId()!;
 
-                if (!isUserCreator)
+                bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, userId);
+                bool hasAccess = true;
+
+                if (communityId != null)
                 {
+                    hasAccess = await this.moderatorService.IsModeratorAsync(userId, communityId) ||
+                        await this.communityService.IsUserOwnerAsync(communityId, userId) ||
+                        isUserCreator;
+                }
+                else
+                {
+                    hasAccess = isUserCreator;
+                }
+
+                if (!hasAccess)
+                {
+                    //TempData
                     throw new InvalidOperationException("User is not the creator of the post!");
                 }
 
@@ -78,6 +98,28 @@
                 return View(model);
             }
 
+            string userId = User.GetId()!;
+
+            bool isUserCreator = await this.postService.IsUserCreatorAsync(model.Id!, userId);
+            bool hasAccess = true;
+
+            if (model.CommunityId != null)
+            {
+                hasAccess = await this.moderatorService.IsModeratorAsync(userId, model.CommunityId) ||
+                    await this.communityService.IsUserOwnerAsync(model.CommunityId, userId) ||
+                    isUserCreator;
+            }
+            else
+            {
+                hasAccess = isUserCreator;
+            }
+
+            if (!hasAccess)
+            {
+                //TempData
+                throw new InvalidOperationException("User is not the creator of the post!");
+            }
+
             try
             {
                 await this.postService.EditAsync(model);
@@ -91,12 +133,27 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(string postId)
+        public async Task<IActionResult> Delete(string postId, string? communityId)
         {
-            bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, User.GetId()!);
+            string userId = User.GetId()!;
 
-            if (!isUserCreator)
+            bool isUserCreator = await this.postService.IsUserCreatorAsync(postId, userId);
+            bool hasAccess = true;
+
+            if (communityId != null)
             {
+                hasAccess = await this.moderatorService.IsModeratorAsync(userId, communityId) ||
+                    await this.communityService.IsUserOwnerAsync(communityId, userId) || 
+                    isUserCreator;
+            }
+            else
+            {
+                hasAccess = isUserCreator;
+            }
+
+            if (!hasAccess)
+            {
+                //TempData
                 throw new InvalidOperationException("User is not the creator of the post!");
             }
 
@@ -110,17 +167,20 @@
             {
                 return Forbid(ae.Message);
             }
-
-
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(PostDeleteViewModel model)
         {
-            bool isUserCreator = await this.postService.IsUserCreatorAsync(model.Id, User.GetId()!);
+            string userId = User.GetId()!;
 
-            if (!isUserCreator)
+            bool hasAccess = await this.moderatorService.IsModeratorAsync(userId, model.CommunityId) ||
+                    await this.communityService.IsUserOwnerAsync(model.CommunityId, userId) ||
+                     await this.postService.IsUserCreatorAsync(model.Id, userId);
+
+            if (!hasAccess)
             {
+                //TempData
                 throw new InvalidOperationException("User is not the creator of the post!");
             }
 

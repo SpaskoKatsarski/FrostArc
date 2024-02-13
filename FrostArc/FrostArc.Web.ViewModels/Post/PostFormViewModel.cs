@@ -5,7 +5,7 @@
 
     public class PostFormViewModel
     {
-        public string? PostId { get; set; }
+        public string? Id { get; set; }
 
         [Required]
         [MaxLength(TitleMaxLength)]

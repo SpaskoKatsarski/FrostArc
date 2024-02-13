@@ -90,11 +90,11 @@
                     </div>
                 </div>
             </div>
-            @if (post.UserId == User.GetId())
+            @if (post.UserId == User.GetId() || isUserMod || isUserOwner)
             {
                 <div class="mb-3">
-                    <a class="btn btn-warning" asp-controller="Post" asp-action="Edit" asp-route-postId="@post.Id">Edit</a>
-                    <a class="btn btn-danger" asp-controller="Post" asp-action="Delete" asp-route-postId="@post.Id">Delete</a>
+                    <a class="btn btn-warning" asp-controller="Post" asp-action="Edit" asp-route-postId="@post.Id" asp-route-communityId="@Model.Id">Edit</a>
+                    <a class="btn btn-danger" asp-controller="Post" asp-action="Delete" asp-route-postId="@post.Id" asp-route-communityId="@Model.Id">Delete</a>
                 </div>
             }
             <div class="card-footer">

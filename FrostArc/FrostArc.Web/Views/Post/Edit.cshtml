@@ -9,8 +9,9 @@
 
 <form asp-area="" asp-controller="Post" asp-action="Edit" method="post" class="mt-4">
     <partial name="_PostFormPartial" model="@Model" />
-    <input type="hidden" asp-for="PostId" />
+    <input type="hidden" asp-for="Id" />
 </form>
+
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />

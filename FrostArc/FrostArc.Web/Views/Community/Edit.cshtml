@@ -9,6 +9,7 @@
 
 <form asp-area="" asp-controller="Community" asp-action="Edit" method="post" class="mt-4">
     <partial name="_CommunityFormPartial" model="@Model" />
+    <input type="hidden" asp-for="Id"/>
 </form>
 
 @section Scripts
