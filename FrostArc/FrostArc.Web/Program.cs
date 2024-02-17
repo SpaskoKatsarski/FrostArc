@@ -6,6 +6,7 @@ using FrostArc.Data;
 using FrostArc.Services.Contracts;
 using FrostArc.Data.Models;
 using FrostArc.Web.Infrastructire.Extensions;
+using FrostArc.Web.Hubs;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services
     {
         options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
     });
+builder.Services.AddSignalR();
 
 // Registering application services with extension method
 builder.Services.RegisterApplicationServices(typeof(IGameService));
@@ -68,5 +70,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.MapHub<ChatHub>("/chatHub");
 
 await app.RunAsync();
