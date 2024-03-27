@@ -78,7 +78,7 @@
                 throw new ArgumentException("Community with the provided ID does not exist!");
             }
 
-            this.dbContext.Remove(community);
+            community.IsDeleted = true;
             await this.dbContext.SaveChangesAsync();
         }
 
