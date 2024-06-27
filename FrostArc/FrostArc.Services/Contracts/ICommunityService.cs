@@ -47,5 +47,7 @@
         Task<IEnumerable<PostAllViewModel>> GetPostsForCommunityAsync(string communityId);
 
         Task<bool> ExistsAsync(string communityId);
+
+        Task<string> GetIdByNameAsync(string name);
     }
 }

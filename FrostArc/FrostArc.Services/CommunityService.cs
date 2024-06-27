@@ -481,5 +481,18 @@
 
             return community != null;
         }
+
+        public async Task<string> GetIdByNameAsync(string name)
+        {
+            Community? community = await dbContext.Communities
+                .FirstOrDefaultAsync(c => c.Name == name);
+
+            if (community == null)
+            {
+                throw new ArgumentException($"Community with name '{name}' not found!");
+            }
+
+            return community.Id.ToString();
+        }
     }
 }

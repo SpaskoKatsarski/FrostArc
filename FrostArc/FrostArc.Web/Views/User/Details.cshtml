@@ -1,6 +1,7 @@
 ﻿@using FrostArc.Services.Contracts
 @model UserDetailsViewModel
 @inject IUserService userService;
+@inject ICommunityService communityService;
 
 @{
     ViewBag.Title = "User Details";
@@ -29,7 +30,7 @@
         <h3>Posts in <strong>@kvp.Key</strong>:</h3>
         @foreach (var post in kvp.Value)
         {
-            <div class="post">
+            @* <div class="post">
                 <h3>@post.Title</h3>
                 <p>@post.Content</p>
                 @if (!string.IsNullOrEmpty(post.ImageUrl))
@@ -49,7 +50,11 @@
                         <p>@comment.Content</p>
                     }
                 </div>
-            </div>
+            </div> *@
+            PostPartialViewModel partialViewModel = new PostPartialViewModel(post);
+            partialViewModel.CommunityId = await this.communityService.GetIdByNameAsync(kvp.Key);
+
+            <partial name="_PostPartial" model=@partialViewModel />
         }
         <hr />
     }

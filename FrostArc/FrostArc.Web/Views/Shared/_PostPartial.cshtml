@@ -1,0 +1,88 @@
+﻿@using FrostArc.Services.Contracts;
+@model PostPartialViewModel;
+@inject ICommunityService communityService;
+@inject IModeratorService moderatorService;
+@inject ICommentService commentService;
+
+@{
+    string userId = User.GetId()!;
+    bool isUserOwner = await this.communityService.IsUserOwnerAsync(Model.CommunityId, userId);
+    bool isUserMod = await this.moderatorService.IsModeratorAsync(userId, Model.CommunityId);
+}
+
+<div class="card mb-4 post">
+    <div class="card-header">
+        @{
+            bool isPostCreatorOwner = await this.communityService.IsUserOwnerAsync(Model.CommunityId, Model.UserId);
+            bool isPostCreatorMod = await this.moderatorService.IsModeratorAsync(Model.UserId, Model.CommunityId);
+        }
+        @if (Model.User != null)
+        {
+            <h5>
+                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserId" style="text-decoration: none;">
+                    @{
+                        var displayText = isPostCreatorOwner || isPostCreatorMod ? "🛠️ " : "";
+                        displayText += Model.User;
+                    }
+                    @displayText
+                </a>:
+            </h5>
+        }
+        <h4 class="card-title">@Model.Title</h4>
+    </div>
+    <div class="card-body">
+        <p class="card-text">@Model.Content</p>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" class="card-img-top mb-3" alt="Post Image">
+        }
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a data-post-id="@Model.Id" data-user-id="@userId" class="btn btn-primary like-btn">👍 @Model.Likes</a>
+                <a data-post-id="@Model.Id" data-user-id="@userId" class="btn btn-danger dislike-btn">👎 @Model.Dislikes</a>
+            </div>
+        </div>
+    </div>
+    @if (Model.UserId == User.GetId() || isUserMod || isUserOwner)
+    {
+        <div class="mb-3">
+            <a class="btn btn-warning" asp-controller="Post" asp-action="Edit" asp-route-postId="@Model.Id" asp-route-communityId="@Model.CommunityId">Edit</a>
+            <a class="btn btn-danger" asp-controller="Post" asp-action="Delete" asp-route-postId="@Model.Id" asp-route-communityId="@Model.CommunityId">Delete</a>
+        </div>
+    }
+    <div class="card-footer">
+        <h6>Comments:</h6>
+        <ul id="comments-@Model.Id">
+            @foreach (var comment in Model.Comments)
+            {
+                <li class="mt-3">
+                    @if (await this.commentService.IsUserCreatorOfCommentAsync(userId, comment.Id) || isUserOwner || isUserMod)
+                    {
+                        <a href="javascript:void(0);" class="settings-toggle" data-target="dropdown-menu-@comment.Id" style="text-decoration: none;">⚙️</a>
+                        <div class="dropdown-menu" id="dropdown-menu-@comment.Id">
+                            @{
+                                bool hasAccess = isUserOwner || isUserMod;
+                            }
+                            <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId" asp-route-isUserOwnerOrMod="@hasAccess">✏️ Edit</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-userId="@comment.UserId" asp-route-isUserOwnerOrMod="@hasAccess">🗑️ Delete</a>
+                        </div>
+                    }
+
+                    @if (isUserOwner || isUserMod)
+                    {
+                        <strong>🛠️ @comment.User:</strong> @comment.Content
+                    }
+                    else
+                    {
+                        <strong>@comment.User:</strong> @comment.Content
+                    }
+                </li>
+            }
+        </ul>
+        <a class="comment-btn btn btn-outline-secondary">Write a Comment</a>
+        <div class="comment-section mt-3" style="display:none">
+            <textarea class="active comment-field" rows="5" cols="70" placeholder="What are your thoughts?"></textarea>
+            <button type="submit" class="btn btn-primary submit-comment" data-post-id="@Model.Id" data-user-id="@userId">Submit Comment</button>
+        </div>
+    </div>
+</div>
