@@ -1,20 +1,92 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #0f2027; /* fallback */
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f0f0f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* FrostArc Styles */
+.card {
+    background-color: #1c1f26;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    }
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+
+.btn-outline-light {
+    border-color: #f0f0f0;
+    color: #f0f0f0;
+}
+
+    .btn-outline-light:hover {
+        background-color: #f0f0f0;
+        color: #1c1f26;
+    }
+
+footer {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+/* FrostArc-specific enhancements */
+h1.display-3 {
+    font-size: 3.5rem;
+    background: linear-gradient(to right, #00f260, #0575e6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+a.btn-primary {
+    background-color: #258cfb;
+    border-color: #258cfb;
+}
+
+    a.btn-primary:hover {
+        background-color: #1b6ec2;
+        border-color: #1b6ec2;
+    }
+
 }
 
 body {

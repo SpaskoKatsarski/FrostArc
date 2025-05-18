@@ -1,8 +1,59 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "FrostArc - Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-3 fw-bold">Welcome to FrostArc</h1>
+        <p class="lead">Explore the worlds of games, genres, platforms, and thriving communities</p>
+        <a asp-controller="Game" asp-action="All" class="btn btn-lg btn-primary mt-3 px-4">Start Exploring</a>
+    </div>
+
+    <div class="row text-center g-4">
+        <!-- Games -->
+        <div class="col-md-4">
+            <div class="card h-100 text-light">
+                <div class="card-body">
+                    <h4 class="card-title">🎮 Games Hub</h4>
+                    <p class="card-text">Discover trending and upcoming games curated just for you.</p>
+                    <a asp-controller="Game" asp-action="All" class="btn btn-outline-light">Browse Games</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genres -->
+        <div class="col-md-4">
+            <div class="card h-100 text-light">
+                <div class="card-body">
+                    <h4 class="card-title">🧩 Genres</h4>
+                    <p class="card-text">Dive into your favorite genres and discover new ones.</p>
+                    <a asp-controller="Genre" asp-action="All" class="btn btn-outline-light">Explore Genres</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Communities -->
+        <div class="col-md-4">
+            <div class="card h-100 text-light">
+                <div class="card-body">
+                    <h4 class="card-title">💬 Communities</h4>
+                    <p class="card-text">Join discussions, forums, and build your squad.</p>
+                    <a asp-controller="Community" asp-action="All" class="btn btn-outline-light">Find Communities</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center g-4 mt-4">
+        <!-- Platforms -->
+        <div class="col-md-6">
+            <div class="card h-100 text-light">
+                <div class="card-body">
+                    <h4 class="card-title">🕹️ Platforms</h4>
+                    <p class="card-text">Check out games by platform and see what's hot.</p>
+                    <a asp-controller="Platform" asp-action="All" class="btn btn-outline-light">View Platforms</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
